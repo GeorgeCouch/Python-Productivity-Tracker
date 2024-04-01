@@ -9,7 +9,7 @@ output_dir = r'/home/george/Documents/Personal Productivity Tracker exe'
 os.makedirs(output_dir, exist_ok=True)
 
 # Copy the icon4.ico file to the output directory
-shutil.copy('icon4.png', os.path.join(output_dir, 'icon4-2.png'))
+shutil.copy('icon4-2.png', os.path.join(output_dir, 'icon4-2.png'))
 
 PyInstaller.__main__.run([
     'Productivity Tracker.py',
