@@ -3711,7 +3711,12 @@ class App(CTk.CTk):
         
 #Run app in dark mode
 CTk.set_appearance_mode("dark")
-CTk.set_default_color_theme("green")
+color = ""
+if (platform.system() == "Linux"):
+    color = "green"
+else:
+    color = "dark-blue"
+CTk.set_default_color_theme(color)
 app = App()
 
 #Function to run before closing window
