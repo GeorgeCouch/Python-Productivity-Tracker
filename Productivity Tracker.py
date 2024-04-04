@@ -3604,7 +3604,7 @@ class DailyFrame(CTk.CTkFrame):
         if (platform.system() == "Linux"):
             timer_font_size = 58
         else:
-            timer_font_size = 12
+            timer_font_size = 75
 
         walking_switch_padding = 0
         if (platform.system() == "Linux"):
