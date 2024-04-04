@@ -3692,7 +3692,11 @@ class App(CTk.CTk):
         # or
         #self.iconphoto(True, ctk.CTkImage(Image.open("path/to/your/icon.png"), size=(32, 32)))  # For other image formats
         #img = PhotoImage(file='icon4.png')
-        self.iconphoto(False, PhotoImage(file='icon4-2.png'))
+        if (platform.system() == "Linux"):
+            self.iconphoto(False, PhotoImage(file='icon4-2.png'))
+        else:
+            self.iconbitmap("icon4-2.ico")  # For .ico files
+        
         self.geometry("920x635")
         center_window(self, 920, 635)
         self.grid_columnconfigure(0, weight=1)

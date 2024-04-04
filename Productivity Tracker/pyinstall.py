@@ -3,7 +3,7 @@ import os
 import shutil
 
 # Change this directory as needed
-output_dir = r'/home/george/Documents/Personal Productivity Tracker exe'
+output_dir = r'Personal Productivity Tracker exe'
 
 # Create the output directory if it doesn't exist
 os.makedirs(output_dir, exist_ok=True)
