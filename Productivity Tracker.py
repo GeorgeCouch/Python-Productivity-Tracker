@@ -3598,10 +3598,10 @@ class DailyFrame(CTk.CTkFrame):
         self.pomodoro_header_label.grid(row=1, column=2, padx=(0,50), pady=(35,0))
 
         # Labels for tracking total daily and pomodoro time
-        self.total_time_label = CTk.CTkLabel(self, text="00:00:00", font=("Segoe UI", 60, "bold"))
+        self.total_time_label = CTk.CTkLabel(self, text="00:00:00", font=("Arial", 72, "bold"))
         self.total_time_label.grid(row=2, column=0, padx=(50,0))
 
-        self.pomodoro_time_label = CTk.CTkLabel(self, text="00:25:00", font=("Segoe UI", 60, "bold"))
+        self.pomodoro_time_label = CTk.CTkLabel(self, text="00:25:00", font=("Arial", 72, "bold"))
         self.pomodoro_time_label.grid(row=2, column=2, padx=(0,50))
 
         # Labels for tracking pomodoro status
@@ -3626,7 +3626,7 @@ class DailyFrame(CTk.CTkFrame):
             self.start_end_button.configure(state="disabled")
 
         self.pause_resume_button = CTk.CTkButton(self, text="Pause", state="disabled", command=pause_resume)
-        self.pause_resume_button.grid(row=4, column=1, pady=(10,65))
+        self.pause_resume_button.grid(row=4, column=1, pady=(10,52))
 
 class ButtonsFrame(CTk.CTkFrame):
     def __init__(self, master):
