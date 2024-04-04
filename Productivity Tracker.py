@@ -3695,7 +3695,7 @@ class App(CTk.CTk):
         if (platform.system() == "Linux"):
             self.iconphoto(False, PhotoImage(file='icon4-2.png'))
         else:
-            self.iconbitmap("icon4-2.ico")  # For .ico files
+            self.iconbitmap("icon4.ico")  # For .ico files
         
         self.geometry("920x635")
         center_window(self, 920, 635)
