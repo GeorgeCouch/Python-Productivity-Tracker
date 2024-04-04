@@ -3587,46 +3587,46 @@ class DailyFrame(CTk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         
         # Title Label
-        self.title = CTk.CTkLabel(self, text="Time Trackers", fg_color="gray30")
+        self.title = CTk.CTkLabel(self, text="Time Trackers", fg_color="gray30", font=("Arial", 12))
         self.title.grid(row=0, column=0, columnspan=4, sticky="ew")
 
         # Header Labels
-        self.session_time_worked_today_header_label = CTk.CTkLabel(self, text="Session Time Worked")
+        self.session_time_worked_today_header_label = CTk.CTkLabel(self, text="Session Time Worked", font=("Arial", 12))
         self.session_time_worked_today_header_label.grid(row=1, column=0, padx=(50,0), pady=(55,0))
 
-        self.pomodoro_header_label = CTk.CTkLabel(self, text="Pomodoro Timer")
+        self.pomodoro_header_label = CTk.CTkLabel(self, text="Pomodoro Timer", font=("Arial", 12))
         self.pomodoro_header_label.grid(row=1, column=2, padx=(0,50), pady=(35,0))
 
         # Labels for tracking total daily and pomodoro time
-        self.total_time_label = CTk.CTkLabel(self, text="00:00:00", font=("Arial", 72, "bold"))
-        self.total_time_label.grid(row=2, column=0, padx=(50,0))
+        self.total_time_label = CTk.CTkLabel(self, text="00:00:00", font=("Arial", 75, "bold"))
+        self.total_time_label.grid(row=2, column=0, padx=(51,0))
 
-        self.pomodoro_time_label = CTk.CTkLabel(self, text="00:25:00", font=("Arial", 72, "bold"))
-        self.pomodoro_time_label.grid(row=2, column=2, padx=(0,50))
+        self.pomodoro_time_label = CTk.CTkLabel(self, text="00:25:00", font=("Arial", 75, "bold"))
+        self.pomodoro_time_label.grid(row=2, column=2, padx=(0,51))
 
         # Labels for tracking pomodoro status
-        self.pomodoro_focus_label = CTk.CTkLabel(self, text="Focus")
+        self.pomodoro_focus_label = CTk.CTkLabel(self, text="Focus", font=("Arial", 12))
         self.pomodoro_focus_label.grid(row=3, column=2, padx=(0,50))
 
-        self.pomodoro_count_label = CTk.CTkLabel(self, text="#1")
+        self.pomodoro_count_label = CTk.CTkLabel(self, text="#1", font=("Arial", 12))
         self.pomodoro_count_label.grid(row=4, column=2, padx=(0,50), pady=(0, 55))
 
         # Options for walking and pomodoro
-        self.walking_switch = CTk.CTkSwitch(self, text="Walking")
+        self.walking_switch = CTk.CTkSwitch(self, text="Walking", font=("Arial", 12))
         self.walking_switch.grid(row=3, column=0, padx=(50,0))
 
-        self.pomodoro_switch = CTk.CTkSwitch(self, text="Pomodoro")
+        self.pomodoro_switch = CTk.CTkSwitch(self, text="Pomodoro", font=("Arial", 12))
         self.pomodoro_switch.grid(row=4, column=0, padx=(50,0), pady=(0,55))
 
         # Buttons for start/end and resume/pause
-        self.start_end_button = CTk.CTkButton(self, text="Start", command=start_end)
+        self.start_end_button = CTk.CTkButton(self, text="Start", command=start_end, font=("Arial", 12))
         self.start_end_button.grid(row=3, column=1, pady=(10,0))
 
         if (must_clear):
             self.start_end_button.configure(state="disabled")
 
-        self.pause_resume_button = CTk.CTkButton(self, text="Pause", state="disabled", command=pause_resume)
-        self.pause_resume_button.grid(row=4, column=1, pady=(10,52))
+        self.pause_resume_button = CTk.CTkButton(self, text="Pause", state="disabled", command=pause_resume, font=("Arial", 12))
+        self.pause_resume_button.grid(row=4, column=1, pady=(10,47))
 
 class ButtonsFrame(CTk.CTkFrame):
     def __init__(self, master):
