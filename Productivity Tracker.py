@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import font
 import customtkinter as CTk
 import time
 import datetime
@@ -3586,6 +3587,17 @@ class DailyFrame(CTk.CTkFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
         
+        # Get the default font and its metrics
+        default_font = font.nametofont("TkDefaultFont")
+        metrics = default_font.metrics()
+
+        # Calculate the desired font size based on the metrics
+        desired_height = 1225  # Adjust this value as needed
+        font_size = int(desired_height / metrics["linespace"])
+
+        # Create a new font with the calculated size
+        custom_font = CTk.CTkFont(family="Arial", size=font_size, weight="bold")
+
         # Title Label
         self.title = CTk.CTkLabel(self, text="Time Trackers", fg_color="gray30", font=("Arial", 12))
         self.title.grid(row=0, column=0, columnspan=4, sticky="ew")
@@ -3598,10 +3610,10 @@ class DailyFrame(CTk.CTkFrame):
         self.pomodoro_header_label.grid(row=1, column=2, padx=(0,50), pady=(35,0))
 
         # Labels for tracking total daily and pomodoro time
-        self.total_time_label = CTk.CTkLabel(self, text="00:00:00", font=("Arial", 75, "bold"))
+        self.total_time_label = CTk.CTkLabel(self, text="00:00:00", font=custom_font)
         self.total_time_label.grid(row=2, column=0, padx=(51,0))
 
-        self.pomodoro_time_label = CTk.CTkLabel(self, text="00:25:00", font=("Arial", 75, "bold"))
+        self.pomodoro_time_label = CTk.CTkLabel(self, text="00:25:00", font=custom_font)
         self.pomodoro_time_label.grid(row=2, column=2, padx=(0,51))
 
         # Labels for tracking pomodoro status
