@@ -2719,39 +2719,39 @@ class ProgrammingFrame(CTk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         
         # Title Label
-        self.title = CTk.CTkLabel(self, text="Programming", fg_color="gray30")
+        self.title = CTk.CTkLabel(self, text="Programming", fg_color="gray30", font=("Arial", 12))
         self.title.grid(row=0, column=0, columnspan=4, sticky="ew")
         
         # Category Labels
-        self.time_programming_label = CTk.CTkLabel(self, text="Time Programming")
+        self.time_programming_label = CTk.CTkLabel(self, text="Time Programming", font=("Arial", 12))
         self.time_programming_label.grid(row=1, column=1)
         
-        self.time_punches_label = CTk.CTkLabel(self, text="Time Punches")
+        self.time_punches_label = CTk.CTkLabel(self, text="Time Punches", font=("Arial", 12))
         self.time_punches_label.grid(row=1, column=2)
 
-        self.description_label = CTk.CTkLabel(self, text="Description of Weekly Work Completed")
+        self.description_label = CTk.CTkLabel(self, text="Description of Weekly Work Completed", font=("Arial", 12))
         self.description_label.grid(row=1, column=3)
         
         # Weekday Labels
-        self.thursday_label = CTk.CTkLabel(self, text="Thursday")
+        self.thursday_label = CTk.CTkLabel(self, text="Thursday", font=("Arial", 12))
         self.thursday_label.grid(row=6, column=0, padx=(12, 5), sticky="w")
 
-        self.friday_label = CTk.CTkLabel(self, text="Friday")
+        self.friday_label = CTk.CTkLabel(self, text="Friday", font=("Arial", 12))
         self.friday_label.grid(row=7, column=0, padx=(12, 5), sticky="w")
 
-        self.saturday_label = CTk.CTkLabel(self, text="Saturday")
+        self.saturday_label = CTk.CTkLabel(self, text="Saturday", font=("Arial", 12))
         self.saturday_label.grid(row=8, column=0, padx=(12, 5), sticky="w")
 
-        self.sunday_label = CTk.CTkLabel(self, text="Sunday")
+        self.sunday_label = CTk.CTkLabel(self, text="Sunday", font=("Arial", 12))
         self.sunday_label.grid(row=2, column=0, padx=(12, 5), sticky="w")
 
-        self.monday_label = CTk.CTkLabel(self, text="Monday")
+        self.monday_label = CTk.CTkLabel(self, text="Monday", font=("Arial", 12))
         self.monday_label.grid(row=3, column=0, padx=(12, 5), sticky="w")
 
-        self.tuesday_label = CTk.CTkLabel(self, text="Tuesday")
+        self.tuesday_label = CTk.CTkLabel(self, text="Tuesday", font=("Arial", 12))
         self.tuesday_label.grid(row=4, column=0, padx=(12, 5), sticky="w")
 
-        self.wednesday_label = CTk.CTkLabel(self, text="Wednesday")
+        self.wednesday_label = CTk.CTkLabel(self, text="Wednesday", font=("Arial", 12))
         self.wednesday_label.grid(row=5, column=0, padx=(12, 5), sticky="w")
         
         # Weekday Hour Entries
@@ -2763,7 +2763,7 @@ class ProgrammingFrame(CTk.CTkFrame):
         global tuesday_programming_time
         global wednesday_programming_time
 
-        self.thursday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.thursday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.thursday_hour_entry.configure(state="disabled")
         self.thursday_hour_entry.grid(row=6, column=1, padx=(5, 5))
 
@@ -2776,7 +2776,7 @@ class ProgrammingFrame(CTk.CTkFrame):
                 self.thursday_hour_entry.insert(0, programming_time_string)
                 self.thursday_hour_entry.configure(state="disabled")
 
-        self.friday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.friday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.friday_hour_entry.configure(state="disabled")
         self.friday_hour_entry.grid(row=7, column=1, padx=(5, 5))
 
@@ -2789,7 +2789,7 @@ class ProgrammingFrame(CTk.CTkFrame):
             self.friday_hour_entry.insert(0, programming_time_string)
             self.friday_hour_entry.configure(state="disabled")
 
-        self.saturday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.saturday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.saturday_hour_entry.configure(state="disabled")
         self.saturday_hour_entry.grid(row=8, column=1, padx=(5, 5))
 
@@ -2802,7 +2802,7 @@ class ProgrammingFrame(CTk.CTkFrame):
             self.saturday_hour_entry.insert(0, programming_time_string)
             self.saturday_hour_entry.configure(state="disabled")
 
-        self.sunday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.sunday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.sunday_hour_entry.configure(state="disabled")
         self.sunday_hour_entry.grid(row=2, column=1, padx=(5, 5))
 
@@ -2815,7 +2815,7 @@ class ProgrammingFrame(CTk.CTkFrame):
             self.sunday_hour_entry.insert(0, programming_time_string)
             self.sunday_hour_entry.configure(state="disabled")
 
-        self.monday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.monday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.monday_hour_entry.configure(state="disabled")
         self.monday_hour_entry.grid(row=3, column=1, padx=(5, 5))
 
@@ -2828,7 +2828,7 @@ class ProgrammingFrame(CTk.CTkFrame):
             self.monday_hour_entry.insert(0, programming_time_string)
             self.monday_hour_entry.configure(state="disabled")
 
-        self.tuesday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.tuesday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.tuesday_hour_entry.configure(state="disabled")
         self.tuesday_hour_entry.grid(row=4, column=1, padx=(5, 5))
 
@@ -2841,7 +2841,7 @@ class ProgrammingFrame(CTk.CTkFrame):
             self.tuesday_hour_entry.insert(0, programming_time_string)
             self.tuesday_hour_entry.configure(state="disabled")
 
-        self.wednesday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.wednesday_hour_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.wednesday_hour_entry.configure(state="disabled")
         self.wednesday_hour_entry.grid(row=5, column=1, padx=(5, 5))
 
@@ -2878,36 +2878,36 @@ class ProgrammingFrame(CTk.CTkFrame):
             wednesday_punches = ["None"]
 
         # Weekday Punches Option Menus
-        self.thursday_punches_entry = CTk.CTkOptionMenu(self, values=thursday_punches, command=self.reset_thursday_option)
+        self.thursday_punches_entry = CTk.CTkOptionMenu(self, values=thursday_punches, command=self.reset_thursday_option, font=("Arial", 12))
         self.thursday_punches_entry.set("Punches")
         self.thursday_punches_entry.grid(row=6, column=2, padx=(5, 5), pady=(5,5))
 
-        self.friday_punches_entry = CTk.CTkOptionMenu(self, values=friday_punches, command=self.reset_friday_option)
+        self.friday_punches_entry = CTk.CTkOptionMenu(self, values=friday_punches, command=self.reset_friday_option, font=("Arial", 12))
         self.friday_punches_entry.set("Punches")
         self.friday_punches_entry.grid(row=7, column=2, padx=(5, 5), pady=(5,5))
 
-        self.saturday_punches_entry = CTk.CTkOptionMenu(self, values=saturday_punches, command=self.reset_saturday_option)
+        self.saturday_punches_entry = CTk.CTkOptionMenu(self, values=saturday_punches, command=self.reset_saturday_option, font=("Arial", 12))
         self.saturday_punches_entry.set("Punches")
         self.saturday_punches_entry.grid(row=8, column=2, padx=(5, 5), pady=(5,5))
 
-        self.sunday_punches_entry = CTk.CTkOptionMenu(self, values=sunday_punches, command=self.reset_sunday_option)
+        self.sunday_punches_entry = CTk.CTkOptionMenu(self, values=sunday_punches, command=self.reset_sunday_option, font=("Arial", 12))
         self.sunday_punches_entry.set("Punches")
         self.sunday_punches_entry.grid(row=2, column=2, padx=(5, 5), pady=(5,5))
 
-        self.monday_punches_entry = CTk.CTkOptionMenu(self, values=monday_punches, command=self.reset_monday_option)
+        self.monday_punches_entry = CTk.CTkOptionMenu(self, values=monday_punches, command=self.reset_monday_option, font=("Arial", 12))
         self.monday_punches_entry.set("Punches")
         self.monday_punches_entry.grid(row=3, column=2, padx=(5, 5), pady=(5,5))
 
-        self.tuesday_punches_entry = CTk.CTkOptionMenu(self, values=tuesday_punches, command=self.reset_tuesday_option)
+        self.tuesday_punches_entry = CTk.CTkOptionMenu(self, values=tuesday_punches, command=self.reset_tuesday_option, font=("Arial", 12))
         self.tuesday_punches_entry.set("Punches")
         self.tuesday_punches_entry.grid(row=4, column=2, padx=(5, 5), pady=(5,5))
 
-        self.wednesday_punches_entry = CTk.CTkOptionMenu(self, values=wednesday_punches, command=self.reset_wednesday_option)
+        self.wednesday_punches_entry = CTk.CTkOptionMenu(self, values=wednesday_punches, command=self.reset_wednesday_option, font=("Arial", 12))
         self.wednesday_punches_entry.set("Punches")
         self.wednesday_punches_entry.grid(row=5, column=2, padx=(5, 5), pady=(5,5))
 
         # Text Box
-        self.description_textbox = CTk.CTkTextbox(self, width=440, height=258, wrap="word")
+        self.description_textbox = CTk.CTkTextbox(self, width=440, height=258, wrap="word", font=("Arial", 12))
         self.description_textbox.grid(row=2, column=3, rowspan=7, padx=(5, 12))
         self.description_textbox.bind("<KeyRelease>", save_description)
 
@@ -3455,31 +3455,31 @@ class TotalsFrame(CTk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         
         # Title Label
-        self.title = CTk.CTkLabel(self, text="Total Weekly Statistics", fg_color="gray30")
+        self.title = CTk.CTkLabel(self, text="Total Weekly Statistics", fg_color="gray30", font=("Arial", 12))
         self.title.grid(row=0, column=0, columnspan=6, sticky="ew")
         
         # Category Labels
-        self.time_programming_label = CTk.CTkLabel(self, text="Time Programming")
+        self.time_programming_label = CTk.CTkLabel(self, text="Time Programming", font=("Arial", 12))
         self.time_programming_label.grid(row=1, column=1, padx=(108, 50))
 
-        self.weight_lost_label = CTk.CTkLabel(self, text="Weight Lost")
+        self.weight_lost_label = CTk.CTkLabel(self, text="Weight Lost", font=("Arial", 12))
         self.weight_lost_label.grid(row=1, column=2, padx=(50, 50))
         
-        self.time_walked_label = CTk.CTkLabel(self, text="Time Walked")
+        self.time_walked_label = CTk.CTkLabel(self, text="Time Walked", font=("Arial", 12))
         self.time_walked_label.grid(row=1, column=3, padx=(50, 108))
 
-        self.distance_label = CTk.CTkLabel(self, text="Distance")
+        self.distance_label = CTk.CTkLabel(self, text="Distance", font=("Arial", 12))
         self.distance_label.grid(row=3, column=1, padx=(108, 50))
 
-        self.steps_label = CTk.CTkLabel(self, text="Steps")
+        self.steps_label = CTk.CTkLabel(self, text="Steps", font=("Arial", 12))
         self.steps_label.grid(row=3, column=2, padx=(50, 50))
 
-        self.calories_burned_label = CTk.CTkLabel(self, text="Calories Burned")
+        self.calories_burned_label = CTk.CTkLabel(self, text="Calories Burned", font=("Arial", 12))
         self.calories_burned_label.grid(row=3, column=3, padx=(50, 108))
         
         # Total Time Programming Entry
         global total_programming_time
-        self.time_programming_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.time_programming_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.time_programming_entry.configure(state="disabled")
         self.time_programming_entry.grid(row=2, column=1, padx=(110, 50), pady=(5,5))
 
@@ -3493,7 +3493,7 @@ class TotalsFrame(CTk.CTkFrame):
             self.time_programming_entry.configure(state="disabled")
 
         # Total Weight Lost
-        self.total_weight_lost_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center")
+        self.total_weight_lost_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center", font=("Arial", 12))
         self.total_weight_lost_entry.configure(state="disabled")
         self.total_weight_lost_entry.grid(row=2, column=2, padx=(50, 50), pady=(5,5))
 
@@ -3505,7 +3505,7 @@ class TotalsFrame(CTk.CTkFrame):
 
         # Total Time Walked Entry
         global total_walking_time
-        self.time_walked_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
+        self.time_walked_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center", font=("Arial", 12))
         self.time_walked_entry.configure(state="disabled")
         self.time_walked_entry.grid(row=2, column=3, padx=(50, 110), pady=(5,5))
 
@@ -3519,7 +3519,7 @@ class TotalsFrame(CTk.CTkFrame):
             self.time_walked_entry.configure(state="disabled")
 
         # Total Distance Entry
-        self.distance_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center")
+        self.distance_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center", font=("Arial", 12))
         self.distance_entry.configure(state="disabled")
         self.distance_entry.grid(row=4, column=1, padx=(108, 50), pady=(5,5))
 
@@ -3530,7 +3530,7 @@ class TotalsFrame(CTk.CTkFrame):
             self.distance_entry.configure(state="disabled")
 
         # Total Steps Entry
-        self.steps_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center")
+        self.steps_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center", font=("Arial", 12))
         self.steps_entry.configure(state="disabled")
         self.steps_entry.grid(row=4, column=2, padx=(50, 50), pady=(5,5))
 
@@ -3541,7 +3541,7 @@ class TotalsFrame(CTk.CTkFrame):
             self.steps_entry.configure(state="disabled")
 
         # Total Calories Burned Entry
-        self.calories_burned_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center")
+        self.calories_burned_entry = CTk.CTkEntry(self, placeholder_text="0", justify="center", font=("Arial", 12))
         self.calories_burned_entry.configure(state="disabled")
         self.calories_burned_entry.grid(row=4, column=3, padx=(50, 108), pady=(5,5))
 
@@ -3634,11 +3634,11 @@ class ButtonsFrame(CTk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
 
         # Add Send Weekly Data Button
-        self.send_weekly_data_button = CTk.CTkButton(self, text="Send Weekly Data", command=send_data_modal)
+        self.send_weekly_data_button = CTk.CTkButton(self, text="Send Weekly Data", command=send_data_modal, font=("Arial", 12))
         self.send_weekly_data_button.grid(row=0, column=0, padx=(0,30), pady=(10,0))
 
         # Add Clear Weekly Data Button
-        self.clear_weekly_data_button = CTk.CTkButton(self, text="Clear Weekly Data", command=clear_data_modal)
+        self.clear_weekly_data_button = CTk.CTkButton(self, text="Clear Weekly Data", command=clear_data_modal, font=("Arial", 12))
         self.clear_weekly_data_button.grid(row=0, column=1, padx=(30,0), pady=(10,0))
 
 class ToplevelWindow(CTk.CTkToplevel):
@@ -3739,5 +3739,8 @@ app.protocol("WM_DELETE_WINDOW", on_close)
 #TODO Run tests on all days
 #TODO Refactor
 #TODO Package
+#TODO Theme Picker?
+#TODO Lock Window Size
+#TODO Make icon work across all OS
 
 app.mainloop()
