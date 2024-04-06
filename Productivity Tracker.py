@@ -11,6 +11,7 @@ import csv
 import discord
 from dotenv import load_dotenv
 import platform
+import re
 
 tracking = False
 pomodoro_break = False
@@ -27,6 +28,7 @@ p_cycle_count = 1
 start_time = 0
 time_passed = 0
 timer_id = ""
+curr_week_str = ""
 
 file_path = "variables.json"
 # Check if the file exists
@@ -66,6 +68,12 @@ if not os.path.isfile(file_path):
         file.write("GeorgeCMisc='None'\n")
         file.write("Programming_Webhooks='None'\n")
         file.write("Exercise_Webhooks='None'\n")
+
+file_path = "current_week.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
 
 # Open the JSON file
 with open("variables.json", "r") as file:
@@ -241,6 +249,18 @@ if ("must_clear" not in data):
 must_clear = data["must_clear"]
 current_week = data["current_week"]
 
+# Open the JSON file
+with open("current_week.json", "r") as file:
+    # Load the JSON data
+    data = json.load(file)
+
+if ("current_week_str" not in data):
+    data = {
+        "curr_week_str": ""
+    }
+
+curr_week_str = data["curr_week_str"]
+
 current_weight = 0
 
 can_clear = True
@@ -310,7 +330,11 @@ def send_data_modal():
     tab_view.add("Exercise Data")
     tab_view.grid(row=1, column=0, columnspan=4, sticky="we")
 
-    current_week_range = get_date_range_for_current_week()
+    current_week_range = ""
+    if (curr_week_str != ""):
+        current_week_range = curr_week_str
+    else:
+        current_week_range = get_date_range_for_current_week()
 
     # Time Worked Each Day
     text_to_send = ""
@@ -986,6 +1010,7 @@ def save_description(event):
 thursday_weight_as_float = 0
 def validate_thursday_weight_float(event):
     global thursday_weight_as_float
+    global thursday_weight
     try:
         thursday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.get())
         thursday_weight = thursday_weight_as_float
@@ -996,26 +1021,249 @@ def validate_thursday_weight_float(event):
 friday_weight_as_float = 0
 def validate_friday_weight_float(event):
     global friday_weight_as_float
+    global friday_weight
     try:
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get() == ""):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.insert(0, "0")
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get().startswith("0")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0)
+
         friday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get())
         friday_weight = friday_weight_as_float
+        data = {
+        "thursday_weight": thursday_weight,
+        "friday_weight": friday_weight,
+        "saturday_weight": saturday_weight,
+        "sunday_weight": sunday_weight,
+        "monday_weight": monday_weight,
+        "tuesday_weight": tuesday_weight,
+        "wednesday_weight": wednesday_weight,
+        "total_weight_lost": total_weight_lost,
+
+        "thursday_walking_time": thursday_walking_time,
+        "friday_walking_time": friday_walking_time,
+        "saturday_walking_time": saturday_walking_time,
+        "sunday_walking_time": sunday_walking_time,
+        "monday_walking_time": monday_walking_time,
+        "tuesday_walking_time": tuesday_walking_time,
+        "wednesday_walking_time": wednesday_walking_time,
+        "total_walking_time": total_walking_time,
+
+        "thursday_walking_distance": thursday_walking_distance,
+        "friday_walking_distance": friday_walking_distance,
+        "saturday_walking_distance": saturday_walking_distance,
+        "sunday_walking_distance": sunday_walking_distance,
+        "monday_walking_distance": monday_walking_distance,
+        "tuesday_walking_distance": tuesday_walking_distance,
+        "wednesday_walking_distance": wednesday_walking_distance,
+        "total_walking_distance": total_walking_distance,
+
+        "thursday_walking_steps": thursday_walking_steps,
+        "friday_walking_steps": friday_walking_steps,
+        "saturday_walking_steps": saturday_walking_steps,
+        "sunday_walking_steps": sunday_walking_steps,
+        "monday_walking_steps": monday_walking_steps,
+        "tuesday_walking_steps": tuesday_walking_steps,
+        "wednesday_walking_steps": wednesday_walking_steps,
+        "total_walking_steps": total_walking_steps,
+
+        "thursday_calories": thursday_calories,
+        "friday_calories": friday_calories,
+        "saturday_calories": saturday_calories,
+        "sunday_calories": sunday_calories,
+        "monday_calories": monday_calories,
+        "tuesday_calories": tuesday_calories,
+        "wednesday_calories": wednesday_calories,
+        "total_calories": total_calories
+        }
+
+        threading.Thread(target=write_walking_variables_to_file, args=(data,)).start()
+
     except ValueError:
-        app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0, "end")
-        app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.insert(0, str(friday_weight_as_float))
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get() == ""):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.insert(0, "0")
+            friday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get())
+            friday_weight = friday_weight_as_float
+            data = {
+            "thursday_weight": thursday_weight,
+            "friday_weight": friday_weight,
+            "saturday_weight": saturday_weight,
+            "sunday_weight": sunday_weight,
+            "monday_weight": monday_weight,
+            "tuesday_weight": tuesday_weight,
+            "wednesday_weight": wednesday_weight,
+            "total_weight_lost": total_weight_lost,
+
+            "thursday_walking_time": thursday_walking_time,
+            "friday_walking_time": friday_walking_time,
+            "saturday_walking_time": saturday_walking_time,
+            "sunday_walking_time": sunday_walking_time,
+            "monday_walking_time": monday_walking_time,
+            "tuesday_walking_time": tuesday_walking_time,
+            "wednesday_walking_time": wednesday_walking_time,
+            "total_walking_time": total_walking_time,
+
+            "thursday_walking_distance": thursday_walking_distance,
+            "friday_walking_distance": friday_walking_distance,
+            "saturday_walking_distance": saturday_walking_distance,
+            "sunday_walking_distance": sunday_walking_distance,
+            "monday_walking_distance": monday_walking_distance,
+            "tuesday_walking_distance": tuesday_walking_distance,
+            "wednesday_walking_distance": wednesday_walking_distance,
+            "total_walking_distance": total_walking_distance,
+
+            "thursday_walking_steps": thursday_walking_steps,
+            "friday_walking_steps": friday_walking_steps,
+            "saturday_walking_steps": saturday_walking_steps,
+            "sunday_walking_steps": sunday_walking_steps,
+            "monday_walking_steps": monday_walking_steps,
+            "tuesday_walking_steps": tuesday_walking_steps,
+            "wednesday_walking_steps": wednesday_walking_steps,
+            "total_walking_steps": total_walking_steps,
+
+            "thursday_calories": thursday_calories,
+            "friday_calories": friday_calories,
+            "saturday_calories": saturday_calories,
+            "sunday_calories": sunday_calories,
+            "monday_calories": monday_calories,
+            "tuesday_calories": tuesday_calories,
+            "wednesday_calories": wednesday_calories,
+            "total_calories": total_calories
+            }
+
+            threading.Thread(target=write_walking_variables_to_file, args=(data,)).start()
+        else:
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.insert(0, str(friday_weight))
 
 saturday_weight_as_float = 0
 def validate_saturday_weight_float(event):
     global saturday_weight_as_float
+    global saturday_weight
     try:
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get() == ""):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, "0")
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get().startswith("0") and not app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0)
+
         saturday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get())
         saturday_weight = saturday_weight_as_float
+        data = {
+        "thursday_weight": thursday_weight,
+        "friday_weight": friday_weight,
+        "saturday_weight": saturday_weight,
+        "sunday_weight": sunday_weight,
+        "monday_weight": monday_weight,
+        "tuesday_weight": tuesday_weight,
+        "wednesday_weight": wednesday_weight,
+        "total_weight_lost": total_weight_lost,
+
+        "thursday_walking_time": thursday_walking_time,
+        "friday_walking_time": friday_walking_time,
+        "saturday_walking_time": saturday_walking_time,
+        "sunday_walking_time": sunday_walking_time,
+        "monday_walking_time": monday_walking_time,
+        "tuesday_walking_time": tuesday_walking_time,
+        "wednesday_walking_time": wednesday_walking_time,
+        "total_walking_time": total_walking_time,
+
+        "thursday_walking_distance": thursday_walking_distance,
+        "friday_walking_distance": friday_walking_distance,
+        "saturday_walking_distance": saturday_walking_distance,
+        "sunday_walking_distance": sunday_walking_distance,
+        "monday_walking_distance": monday_walking_distance,
+        "tuesday_walking_distance": tuesday_walking_distance,
+        "wednesday_walking_distance": wednesday_walking_distance,
+        "total_walking_distance": total_walking_distance,
+
+        "thursday_walking_steps": thursday_walking_steps,
+        "friday_walking_steps": friday_walking_steps,
+        "saturday_walking_steps": saturday_walking_steps,
+        "sunday_walking_steps": sunday_walking_steps,
+        "monday_walking_steps": monday_walking_steps,
+        "tuesday_walking_steps": tuesday_walking_steps,
+        "wednesday_walking_steps": wednesday_walking_steps,
+        "total_walking_steps": total_walking_steps,
+
+        "thursday_calories": thursday_calories,
+        "friday_calories": friday_calories,
+        "saturday_calories": saturday_calories,
+        "sunday_calories": sunday_calories,
+        "monday_calories": monday_calories,
+        "tuesday_calories": tuesday_calories,
+        "wednesday_calories": wednesday_calories,
+        "total_calories": total_calories
+        }
+
+        threading.Thread(target=write_walking_variables_to_file, args=(data,)).start()
+
     except ValueError:
-        app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0, "end")
-        app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(saturday_weight_as_float))
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get() == ""):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, "0")
+            saturday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get())
+            saturday_weight = saturday_weight_as_float
+            data = {
+            "thursday_weight": thursday_weight,
+            "friday_weight": friday_weight,
+            "saturday_weight": saturday_weight,
+            "sunday_weight": sunday_weight,
+            "monday_weight": monday_weight,
+            "tuesday_weight": tuesday_weight,
+            "wednesday_weight": wednesday_weight,
+            "total_weight_lost": total_weight_lost,
+
+            "thursday_walking_time": thursday_walking_time,
+            "friday_walking_time": friday_walking_time,
+            "saturday_walking_time": saturday_walking_time,
+            "sunday_walking_time": sunday_walking_time,
+            "monday_walking_time": monday_walking_time,
+            "tuesday_walking_time": tuesday_walking_time,
+            "wednesday_walking_time": wednesday_walking_time,
+            "total_walking_time": total_walking_time,
+
+            "thursday_walking_distance": thursday_walking_distance,
+            "friday_walking_distance": friday_walking_distance,
+            "saturday_walking_distance": saturday_walking_distance,
+            "sunday_walking_distance": sunday_walking_distance,
+            "monday_walking_distance": monday_walking_distance,
+            "tuesday_walking_distance": tuesday_walking_distance,
+            "wednesday_walking_distance": wednesday_walking_distance,
+            "total_walking_distance": total_walking_distance,
+
+            "thursday_walking_steps": thursday_walking_steps,
+            "friday_walking_steps": friday_walking_steps,
+            "saturday_walking_steps": saturday_walking_steps,
+            "sunday_walking_steps": sunday_walking_steps,
+            "monday_walking_steps": monday_walking_steps,
+            "tuesday_walking_steps": tuesday_walking_steps,
+            "wednesday_walking_steps": wednesday_walking_steps,
+            "total_walking_steps": total_walking_steps,
+
+            "thursday_calories": thursday_calories,
+            "friday_calories": friday_calories,
+            "saturday_calories": saturday_calories,
+            "sunday_calories": sunday_calories,
+            "monday_calories": monday_calories,
+            "tuesday_calories": tuesday_calories,
+            "wednesday_calories": wednesday_calories,
+            "total_calories": total_calories
+            }
+
+            threading.Thread(target=write_walking_variables_to_file, args=(data,)).start()
+        else:
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(saturday_weight))
 
 sunday_weight_as_float = 0
 def validate_sunday_weight_float(event):
     global sunday_weight_as_float
+    global sunday_weight
     try:
         sunday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.get())
         sunday_weight = sunday_weight_as_float
@@ -1026,6 +1274,7 @@ def validate_sunday_weight_float(event):
 monday_weight_as_float = 0
 def validate_monday_weight_float(event):
     global monday_weight_as_float
+    global monday_weight
     try:
         monday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.get())
         monday_weight = monday_weight_as_float
@@ -1036,6 +1285,7 @@ def validate_monday_weight_float(event):
 tuesday_weight_as_float = 0
 def validate_tuesday_weight_float(event):
     global tuesday_weight_as_float
+    global tuesday_weight
     try:
         tuesday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.get())
         tuesday_weight = tuesday_weight_as_float
@@ -1046,6 +1296,7 @@ def validate_tuesday_weight_float(event):
 wednesday_weight_as_float = 0
 def validate_wednesday_weight_float(event):
     global wednesday_weight_as_float
+    global wednesday_weight
     try:
         wednesday_weight_as_float = float(app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.get())
         wednesday_weight = wednesday_weight_as_float
@@ -1069,6 +1320,7 @@ def start_end():
     global can_clear
     global must_clear
     global current_week
+    global curr_week_str
     if (current_week != datetime.datetime.now().strftime("%U %Y") and current_week != -1):
         app.weekly_daily_tabs.daily_tab.start_end_button.configure(state="disabled")
         # Create a notification
@@ -1087,6 +1339,78 @@ def start_end():
         app.buttons_frame.send_weekly_data_button.configure(state="disabled")
         app.buttons_frame.clear_weekly_data_button.configure(state="disabled")
         app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.configure(state="disabled")
+
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.delete(0, "end")
+        
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0, "end")
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0, "end")
+
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.delete(0, "end")
+
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.delete(0, "end")
+
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.delete(0, "end")
+
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.get() != ""):
+            if (float(app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.get()) == 0):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.delete(0, "end")
+
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(thursday_weight))
+        
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(friday_weight))
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(saturday_weight))
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(sunday_weight))
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(monday_weight))
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(tuesday_weight))
+
+        if (app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.get().endswith(".")):
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.delete(0, "end")
+            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.insert(0, str(wednesday_weight))
+        
+
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+        app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
         app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
         app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
         app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
@@ -1150,6 +1474,21 @@ def start_end():
             }
 
             threading.Thread(target=write_punches_to_file, args=(data,)).start()
+
+            if (curr_week_str == ""):
+                curr_week_str = get_date_range_for_current_week()
+                data = {
+                    "curr_week_str": curr_week_str
+                }
+                threading.Thread(target=write_current_week_to_file, args=(data,)).start()
+
+            if (current_week == -1):
+                current_week = datetime.datetime.now().strftime("%U %Y")
+                data = {
+                    "must_clear": must_clear,
+                    "current_week": current_week
+                }
+                threading.Thread(target=write_must_clear_to_file, args=(data,)).start()
             
             # Flush out timer if one is set and start clock
             if (timer_id != ""):
@@ -1180,13 +1519,120 @@ def start_end():
             else:
                 app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="normal")
 
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="normal")
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="normal")
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="normal")
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="normal")
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="normal")
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="normal")
-            app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="normal")
+            day = datetime.datetime.now().strftime("%A")
+            if (day == "Thursday"):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="Enter Weight")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="normal")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="disabled")
+            elif (day == "Friday"):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="Enter Weight")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="normal")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="disabled")
+            elif (day == "Saturday"):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="Enter Weight")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="normal")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="disabled")
+            elif (day == "Sunday"):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="Enter Weight")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="normal")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="disabled")
+            elif (day == "Monday"):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="Enter Weight")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="normal")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="disabled")
+            elif (day == "Tuesday"):
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="Enter Weight")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="NONE")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="normal")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="disabled")
+            else:
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(placeholder_text="NONE")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(placeholder_text="Enter Weight")
+
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.thursday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.friday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.saturday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.sunday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.monday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.tuesday_weight_entry.configure(state="disabled")
+                app.weekly_daily_tabs.weekly_tab.exercise_frame.wednesday_weight_entry.configure(state="normal")
+
             app.weekly_daily_tabs.daily_tab.start_end_button.configure(text="Start")
             app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(state="disabled")
             app.weekly_daily_tabs.daily_tab.total_time_label.configure(text="00:00:00")
@@ -2407,6 +2853,13 @@ def write_must_clear_to_file(data):
     except Exception as e:
         write_must_clear_to_file(data)
 
+def write_current_week_to_file(data):
+    try:
+        with open("current_week.json", "w") as file:
+            json.dump(data, file)
+    except Exception as e:
+        write_current_week_to_file(data)
+
 def clear_data():
     # Check if files exist
     variables_path = "variables.json"
@@ -2414,8 +2867,9 @@ def clear_data():
     walking_path = "walking.json"
     description_path = "description.json"
     must_clear_path = "must_clear.json"
+    current_week_path = "current_week.json"
     # Check if the file exists
-    if (os.path.isfile(variables_path) and os.path.isfile(punches_path) and os.path.isfile(walking_path) and os.path.isfile(description_path) and os.path.isfile(must_clear_path)):
+    if (os.path.isfile(variables_path) and os.path.isfile(punches_path) and os.path.isfile(walking_path) and os.path.isfile(description_path) and os.path.isfile(must_clear_path) and os.path.isfile(current_week_path)):
         # Check that not tracking (this needs to be fixed, currently it only works on boot)
         if (can_clear):
             # Empty all data from files
@@ -2424,6 +2878,7 @@ def clear_data():
             write_walking_variables_to_file(data)
             write_punches_to_file(data)
             write_description_to_file(data)
+            write_current_week_to_file(data)
             write_must_clear_to_file(data)
             
             # Reset all UI fields
