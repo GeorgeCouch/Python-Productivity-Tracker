@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import font
 import customtkinter as CTk
 import time
 import datetime
@@ -11,7 +10,6 @@ import csv
 import discord
 from dotenv import load_dotenv
 import platform
-import re
 
 tracking = False
 pomodoro_break = False
@@ -2052,6 +2050,8 @@ def walking():
         app.totals_frame.time_walked_entry.insert(0, walking_time_string)
         app.totals_frame.time_walked_entry.configure(state="disabled")
 
+        update_walking_stats()
+
 def update_walking_stats():
     global thursday_walking_distance
     global friday_walking_distance
@@ -2076,7 +2076,7 @@ def update_walking_stats():
     global monday_calories
     global tuesday_calories
     global wednesday_calories
-
+    
     day = datetime.datetime.now().strftime("%A")
     if (day == "Thursday"):
         time_in_seconds = thursday_walking_time
@@ -2648,7 +2648,7 @@ def update_time(firstpass):
             pomodoro()
             calc_weight_loss()
             walking()
-            update_walking_stats()
+            # update_walking_stats()
             global thursday_programming_time
             global friday_programming_time
             global saturday_programming_time
