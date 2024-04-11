@@ -446,63 +446,6 @@ class ExerciseFrame(CTk.CTkFrame):
                 entry.configure(placeholder_text="NONE")
                 entry.configure(state="disabled")
 
-
-        # self.thursday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.thursday_weight_entry.grid(row=6, column=1, padx=(5, 5), pady=(5,5))
-        # self.thursday_weight_entry.bind("<KeyRelease>", validate_thursday_weight_float)
-
-        # if (thursday_weight != 0):
-        #     weight_string = str(thursday_weight)
-        #     self.thursday_weight_entry.insert(0, weight_string)
-
-        # self.friday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.friday_weight_entry.grid(row=7, column=1, padx=(5, 5), pady=(5,5))
-        # self.friday_weight_entry.bind("<KeyRelease>", validate_friday_weight_float)
-
-        # if (friday_weight != 0):
-        #     weight_string = str(friday_weight)
-        #     self.friday_weight_entry.insert(0, weight_string)
-
-        # self.saturday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.saturday_weight_entry.grid(row=8, column=1, padx=(5, 5), pady=(5,5))
-        # self.saturday_weight_entry.bind("<KeyRelease>", validate_saturday_weight_float)
-
-        # if (saturday_weight != 0):
-        #     weight_string = str(saturday_weight)
-        #     self.saturday_weight_entry.insert(0, weight_string)
-
-        # self.sunday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.sunday_weight_entry.grid(row=2, column=1, padx=(5, 5), pady=(5,5))
-        # self.sunday_weight_entry.bind("<KeyRelease>", validate_sunday_weight_float)
-
-        # if (sunday_weight != 0):
-        #     weight_string = str(sunday_weight)
-        #     self.sunday_weight_entry.insert(0, weight_string)
-
-        # self.monday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.monday_weight_entry.grid(row=3, column=1, padx=(5, 5), pady=(5,5))
-        # self.monday_weight_entry.bind("<KeyRelease>", validate_monday_weight_float)
-
-        # if (monday_weight != 0):
-        #     weight_string = str(monday_weight)
-        #     self.monday_weight_entry.insert(0, weight_string)
-
-        # self.tuesday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.tuesday_weight_entry.grid(row=4, column=1, padx=(5, 5), pady=(5,5))
-        # self.tuesday_weight_entry.bind("<KeyRelease>", validate_tuesday_weight_float)
-
-        # if (tuesday_weight != 0):
-        #     weight_string = str(tuesday_weight)
-        #     self.tuesday_weight_entry.insert(0, weight_string)
-
-        # self.wednesday_weight_entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
-        # self.wednesday_weight_entry.grid(row=5, column=1, padx=(5, 5), pady=(5,5))
-        # self.wednesday_weight_entry.bind("<KeyRelease>", validate_wednesday_weight_float)
-
-        # if (wednesday_weight != 0):
-        #     weight_string = str(wednesday_weight)
-        #     self.wednesday_weight_entry.insert(0, weight_string)
-
         # Time Walked Entries
         self.thursday_time_walked_entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
         self.thursday_time_walked_entry.configure(state="disabled")
