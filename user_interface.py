@@ -1,9 +1,80 @@
 from tkinter import *
 import customtkinter as CTk
-import platform
-import json
-import threading
+import time
 import datetime
+import json
+from plyer import notification
+import threading
+import os
+import csv
+import discord
+from dotenv import load_dotenv
+import platform
+
+operating_system = ""
+
+tracking = False
+pomodoro_break = False
+readytostart = True
+paused = False
+p_string_store = ""
+focus_time = 1500
+break_time = 300
+long_break_time = 900
+p_focus_time = 1500
+p_break_time = 300
+p_long_break_time = 900
+p_cycle_count = 1
+start_time = 0
+time_passed = 0
+timer_id = ""
+curr_week_str = ""
+
+# region handle loading variables from JSON files
+file_path = "variables.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
+
+file_path = "punches.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
+
+file_path = "walking.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
+
+file_path = "description.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
+
+file_path = "must_clear.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
+
+file_path = ".env"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(".env", "w", newline='') as file:
+        file.write("GeorgeCGeneral='None'\n")
+        file.write("GeorgeCMisc='None'\n")
+        file.write("Programming_Webhooks='None'\n")
+        file.write("Exercise_Webhooks='None'\n")
+
+file_path = "current_week.json"
+# Check if the file exists
+if not os.path.isfile(file_path):
+    with open(file_path, 'w') as file:
+        file.write("{}")
 
 # Open the JSON file
 with open("variables.json", "r") as file:
@@ -54,18 +125,6 @@ sunday_punches = data["sunday_punches"]
 monday_punches = data["monday_punches"]
 tuesday_punches = data["tuesday_punches"]
 wednesday_punches = data["wednesday_punches"]
-
-# Open the JSON file
-with open("description.json", "r") as file:
-    # Load the JSON data
-    data = json.load(file)
-
-if ("description" not in data):
-    data = {
-        "description": ""
-    }
-
-description = data["description"]
 
 # Open the JSON file
 with open("walking.json", "r") as file:
@@ -165,6 +224,364 @@ tuesday_calories = data["tuesday_calories"]
 wednesday_calories = data["wednesday_calories"]
 total_calories = data["total_calories"]
 
+# Open the JSON file
+with open("description.json", "r") as file:
+    # Load the JSON data
+    data = json.load(file)
+
+if ("description" not in data):
+    data = {
+        "description": ""
+    }
+
+description = data["description"]
+
+# Open the JSON file
+with open("must_clear.json", "r") as file:
+    # Load the JSON data
+    data = json.load(file)
+
+if ("must_clear" not in data):
+    data = {
+        "must_clear": False,
+        "current_week": -1
+    }
+
+must_clear = data["must_clear"]
+current_week = data["current_week"]
+
+# Open the JSON file
+with open("current_week.json", "r") as file:
+    # Load the JSON data
+    data = json.load(file)
+
+if ("current_week_str" not in data):
+    data = {
+        "curr_week_str": ""
+    }
+
+curr_week_str = data["curr_week_str"]
+#endregion
+
+daily_programming_times = [sunday_programming_time, monday_programming_time, tuesday_programming_time, wednesday_programming_time, thursday_programming_time, friday_programming_time, saturday_programming_time]
+daily_punches = [sunday_punches, monday_punches, tuesday_punches, wednesday_punches, thursday_punches, friday_punches, saturday_punches]
+daily_weights = [sunday_weight, monday_weight, tuesday_weight, wednesday_weight, thursday_weight, friday_weight, saturday_weight]
+daily_walking_times = [sunday_walking_time, monday_walking_time, tuesday_walking_time, wednesday_walking_time, thursday_walking_time, friday_walking_time, saturday_walking_time]
+daily_distances = [sunday_walking_distance, monday_walking_distance, tuesday_walking_distance, wednesday_walking_distance, thursday_walking_distance, friday_walking_distance, saturday_walking_distance]
+daily_steps = [sunday_walking_steps, monday_walking_steps, tuesday_walking_steps, wednesday_walking_steps, thursday_walking_steps, friday_walking_steps, saturday_walking_steps]
+daily_calories = [sunday_calories, monday_calories, tuesday_calories, wednesday_calories, thursday_calories, friday_calories, saturday_calories]
+
+can_clear = True
+
+must_clear = False
+
+def send_data_modal():
+    pass
+def clear_data_modal():
+    pass
+def new_week_modal():
+    pass
+def walking():
+    pass
+def update_walking_stats():
+    pass
+
+def update_global_daily_lists():
+    global daily_programming_times
+    global daily_punches
+    global daily_weights
+    global daily_walking_times
+    global daily_distances
+    global daily_steps
+    global daily_calories
+
+    daily_programming_times = [sunday_programming_time, monday_programming_time, tuesday_programming_time, wednesday_programming_time, thursday_programming_time, friday_programming_time, saturday_programming_time]
+    daily_punches = [sunday_punches, monday_punches, tuesday_punches, wednesday_punches, thursday_punches, friday_punches, saturday_punches]
+    daily_weights = [sunday_weight, monday_weight, tuesday_weight, wednesday_weight, thursday_weight, friday_weight, saturday_weight]
+    daily_walking_times = [sunday_walking_time, monday_walking_time, tuesday_walking_time, wednesday_walking_time, thursday_walking_time, friday_walking_time, saturday_walking_time]
+    daily_distances = [sunday_walking_distance, monday_walking_distance, tuesday_walking_distance, wednesday_walking_distance, thursday_walking_distance, friday_walking_distance, saturday_walking_distance]
+    daily_steps = [sunday_walking_steps, monday_walking_steps, tuesday_walking_steps, wednesday_walking_steps, thursday_walking_steps, friday_walking_steps, saturday_walking_steps]
+    daily_calories = [sunday_calories, monday_calories, tuesday_calories, wednesday_calories, thursday_calories, friday_calories, saturday_calories]
+
+def pause_resume():
+    global paused
+    global tracking
+    global timer_id
+
+    # pause resume switch
+    if (not paused):
+        paused = True
+        tracking = False
+        app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(text="Resume")
+        app.after_cancel(timer_id)
+    else:
+        paused = False
+        tracking = True
+        app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(text="Pause")
+        app.after_cancel(timer_id)
+        update_time(True)
+
+def create_notification(title, message):
+    notification.notify(
+        title=title,
+        message=message,
+        app_name="Productivity Tracker",
+        app_icon="icon4.ico",
+        timeout=10
+    )
+    app.attributes("-topmost", True)
+    app.attributes("-topmost", False)
+
+def format_pomodoro_time_label(p_time):
+    hours = p_time // 3600
+    minutes = (p_time % 3600) // 60
+    seconds = p_time % 60
+    p_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+    app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=p_string)
+
+def pomodoro():
+    global pomodoro_break
+    global p_focus_time
+    global p_long_break_time
+    global p_break_time
+    global p_cycle_count
+    global focus_time
+    global break_time
+    global long_break_time
+
+    # Determine pomodoro state. Subtract time depending on state
+    if (not pomodoro_break):
+        # 25 min
+        p_focus_time = p_focus_time - 1
+        format_pomodoro_time_label(p_focus_time) 
+    elif (pomodoro_break and p_cycle_count % 4 == 0):
+        # 15 min
+        p_long_break_time = p_long_break_time - 1
+        format_pomodoro_time_label(p_long_break_time)
+    else:
+        # 5 min
+        p_break_time = p_break_time - 1
+        format_pomodoro_time_label(p_break_time)
+        
+    # Handle pomodoro state end (time reaches 00:00:00)
+    if (app.weekly_daily_tabs.daily_tab.pomodoro_time_label._text == "00:00:00"):
+        # Swap break state and increment cycle count if break
+        if (pomodoro_break):
+            p_cycle_count = p_cycle_count + 1
+            app.weekly_daily_tabs.daily_tab.pomodoro_count_label.configure(text="#" + str(p_cycle_count))
+            app.weekly_daily_tabs.daily_tab.pomodoro_focus_label.configure(text="Focus")
+            pomodoro_break = False
+        else:
+            app.weekly_daily_tabs.daily_tab.pomodoro_focus_label.configure(text="Break")
+            pomodoro_break = True
+        
+        # Reset Pomodoro vars
+        p_break_time = break_time
+        p_focus_time = focus_time
+        p_long_break_time = long_break_time
+
+        # Pause and reset label
+        pause_resume()
+
+        # Determine pomodoro state and create notification
+        if (app.weekly_daily_tabs.daily_tab.pomodoro_switch.get() == 1):
+            if (not pomodoro_break):
+                # 25 min
+                create_notification("Focus", "Focus for 25 minutes.")
+                format_pomodoro_time_label(p_focus_time)
+            elif (pomodoro_break and p_cycle_count % 4 == 0):
+                # 15 min
+                create_notification("Long Break", "Break for 15 minutes.")
+                format_pomodoro_time_label(p_long_break_time)
+            else:
+                # 5 min
+                create_notification("Short Break", "Break for 5 minutes.")
+                format_pomodoro_time_label(p_break_time)
+
+def handle_being_clocked_in_past_saturday_midnight():
+    global current_week
+    global can_clear
+    global readytostart
+    global paused
+    global p_focus_time
+    global p_break_time
+    global p_long_break_time
+    global focus_time
+    global break_time
+    global long_break_time
+    global p_cycle_count
+    global tracking
+
+    # Test to see if current week is equal to the week we get now, if not then user must delete data
+    week_num = datetime.datetime.now().strftime("%U %Y")
+    if (current_week != week_num):
+        can_clear = True
+        
+        # Reset UI and disable clock in
+        app.buttons_frame.send_weekly_data_button.configure(state="normal")
+        app.buttons_frame.clear_weekly_data_button.configure(state="normal")
+        app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.configure(state="normal")
+        app.weekly_daily_tabs.daily_tab.start_end_button.configure(text="Start")
+        app.weekly_daily_tabs.daily_tab.start_end_button.configure(state="disabled")
+        app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(state="disabled")
+        app.weekly_daily_tabs.daily_tab.total_time_label.configure(text="00:00:00")
+        app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text="00:25:00")
+        app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(text="Pause")
+        app.weekly_daily_tabs.daily_tab.pomodoro_count_label.configure(text="#1")
+        app.weekly_daily_tabs.daily_tab.pomodoro_focus_label.configure(text="Focus")
+        
+        # Reset Vars
+        readytostart = True
+        paused = False
+        p_focus_time = focus_time
+        p_break_time = break_time
+        p_long_break_time = long_break_time
+        p_cycle_count = 1
+
+        # Spoof Punchout on Saturday 11:59:59 PM 
+        saturday_punches.append("End: 11:59:59 PM")
+        if (saturday_punches[0] == "None"):
+            saturday_punches.pop(0)
+        app.weekly_daily_tabs.weekly_tab.programming_frame.daily_punches_option_menus[6].configure(values=saturday_punches)
+
+        update_global_daily_lists()
+
+        # Save data to file
+        data = {
+        "thursday_punches": thursday_punches,
+        "friday_punches": friday_punches,
+        "saturday_punches": saturday_punches,
+        "sunday_punches": sunday_punches,
+        "monday_punches": monday_punches,
+        "tuesday_punches": tuesday_punches,
+        "wednesday_punches": wednesday_punches,
+        }
+
+        threading.Thread(target=write_punches_to_file, args=(data,)).start()
+
+        create_notification("You've been clocked out!", "You've been clocked out due to being clocked in during a new week without clearing first.")
+
+        new_week_modal()
+
+        # Save must_clear as true so the user will have to clear before they clock in again
+        must_clear = True
+
+        data = {
+            "must_clear": must_clear,
+            "current_week": current_week
+        }
+
+        threading.Thread(target=write_must_clear_to_file, args=(data,)).start()
+
+        # Break out of time tracker
+        tracking = False
+        app.after_cancel(timer_id)
+
+def format_entry_time(entry, time):
+        hours = time // 3600
+        minutes = (time % 3600) // 60
+        seconds = time % 60
+        programming_time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+        entry.configure(state="normal")
+        entry.delete(0, "end")
+        entry.insert(0, programming_time_string)
+        entry.configure(state="disabled")
+
+def update_time(firstpass):
+    global current_week
+    global tracking
+    global total_programming_time
+    global timer_id
+    global daily_programming_times
+
+    # Save current_week if it hasn't been set yet, else see if user is clocked in past saturday at midnight
+    if (current_week == -1):
+        current_week = datetime.datetime.now().strftime("%U %Y")
+        data = {
+            "must_clear": must_clear,
+            "current_week": current_week
+        }
+        threading.Thread(target=write_must_clear_to_file, args=(data,)).start()
+    else:
+        handle_being_clocked_in_past_saturday_midnight()
+
+    if (tracking):
+        # Allows for 1 second buffer
+        if (firstpass):
+            firstpass = False
+        else:
+            # Add time to total time
+            label_text = app.weekly_daily_tabs.daily_tab.total_time_label._text
+            hours, minutes, seconds = map(int, label_text.split(":"))
+            label_value = hours * 3600 + minutes * 60 + seconds
+            label_value = label_value + 1
+            hours = int(label_value // 3600)
+            minutes = int((label_value % 3600) // 60)
+            seconds = int(label_value % 60)
+            time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+            app.weekly_daily_tabs.daily_tab.total_time_label.configure(text=time_string)
+            
+            # Call functions that handle selected options
+            if (app.weekly_daily_tabs.daily_tab.pomodoro_switch.get() == 1):
+                pomodoro()
+            walking()
+            update_walking_stats()
+            
+            # Use local day_as_number in case of day change while program running
+            day_as_number = (datetime.datetime.now().weekday() + 1) % 7
+            programming_time_entries = app.weekly_daily_tabs.weekly_tab.programming_frame.programming_time_entries
+            for i in range(7):
+                # Add time to current day
+                if (day_as_number == i):
+                    daily_programming_times[i] = daily_programming_times[i] + 1
+                    format_entry_time(programming_time_entries[i], daily_programming_times[i])
+                    
+            update_global_daily_lists()
+
+            # Calculate total programming time
+            for i in range(7):
+                total_programming_time = total_programming_time + daily_programming_times[i]
+            
+            format_entry_time(app.totals_frame.time_programming_entry, total_programming_time)
+
+            # Write programming times to file
+            data = {
+                "thursday_programming_time": thursday_programming_time,
+                "friday_programming_time": friday_programming_time,
+                "saturday_programming_time": saturday_programming_time,
+                "sunday_programming_time": sunday_programming_time,
+                "monday_programming_time": monday_programming_time,
+                "tuesday_programming_time": tuesday_programming_time,
+                "wednesday_programming_time": wednesday_programming_time,
+                "total_programming_time": total_programming_time,
+            }
+
+            threading.Thread(target=write_variables_to_file, args=(data,)).start()
+
+        # Recursively call update_time every second. Save timer in timer_id
+        timer_id = app.after(1000, update_time, False)
+
+def write_variables_to_file(data):
+    try:
+        with open("variables.json", "w") as file:
+            json.dump(data, file)
+    except Exception as e:
+        write_variables_to_file(data)
+
+def write_walking_variables_to_file(data):
+    try:
+        with open("walking.json", "w") as file:
+            json.dump(data, file)
+    except Exception as e:
+        write_walking_variables_to_file(data)
+
+def write_punches_to_file(data):
+    try:
+        with open("punches.json", "w") as file:
+            json.dump(data, file)
+    except Exception as e:
+        write_punches_to_file(data)
+
 def write_description_to_file(data):
     try:
         with open("description.json", "w") as file:
@@ -172,25 +589,241 @@ def write_description_to_file(data):
     except Exception as e:
         write_description_to_file(data)
 
-# Get 0-6 based on week day
-day_as_number = (datetime.datetime.now().weekday() + 1) % 7
-weight_as_float = 0
-must_clear = False
-def start_end():
-    pass
-def pause_resume():
-    pass
-def send_data_modal():
-    pass
-def clear_data_modal():
-    pass
+def write_must_clear_to_file(data):
+    try:
+        with open("must_clear.json", "w") as file:
+            json.dump(data, file)
+    except Exception as e:
+        write_must_clear_to_file(data)
 
-# Determine operating system being used
-operating_system = ""
-if (platform.system() == "Linux"):
-    operating_system = "Linux"
-else:
-    operating_system = "Windows"
+def write_current_week_to_file(data):
+    try:
+        with open("current_week.json", "w") as file:
+            json.dump(data, file)
+    except Exception as e:
+        write_current_week_to_file(data)
+
+def get_date_range_for_current_week():
+    """
+    Returns the date range for the current week in the format 'MMM d(st/nd/rd/th) yyyy - MMM d(st/nd/rd/th) yyyy'.
+    The week starts on Sunday and ends on Saturday.
+    """
+    today = datetime.date.today()
+    current_weekday = today.isoweekday()
+
+    # Calculate the start date (Sunday)
+    start_date = today - datetime.timedelta(days=current_weekday % 7)
+
+    # Calculate the end date (Saturday)
+    end_date = start_date + datetime.timedelta(days=6)
+
+    start_date_str = start_date.strftime("%b %d")
+    end_date_str = end_date.strftime("%b %d")
+
+    # Add proper day suffix
+    start_date_str += get_day_suffix(int(start_date.strftime("%d")))
+    end_date_str += get_day_suffix(int(end_date.strftime("%d")))
+
+    # Add year to the date strings
+    start_date_str += f" {start_date.year}"
+    end_date_str += f" {end_date.year}"
+
+    date_range = f"{start_date_str} - {end_date_str}"
+    return date_range
+
+def get_day_suffix(day):
+    """
+    Returns the proper day suffix (st, nd, rd, th) for the given day.
+    """
+    if 4 <= day <= 20 or 24 <= day <= 30:
+        suffix = "th"
+    else:
+        suffix = ["th", "st", "nd", "rd"][day % 10 - 1]
+    return suffix
+
+def append_pop_configure_punches(punches, day_as_number, start_end_str):
+    # Append start punch
+    start_str = start_end_str + str(datetime.datetime.now().strftime("%I:%M:%S %p"))
+    punches.append(start_str)
+    
+    # Pop None punch if it exists
+    if (punches[0] == "None"):
+        punches.pop(0)
+    
+    # Display on UI
+    punch_option_menus = app.weekly_daily_tabs.weekly_tab.programming_frame.daily_punches_option_menus
+    punch_option_menus[day_as_number].configure(values=punches)
+
+def append_and_save_start_end_punch(start_end_str):
+    # Use local day_as_number in case of day change while program running
+    day_as_number = (datetime.datetime.now().weekday() + 1) % 7
+
+    # Call function with different parameters based on day
+    if (day_as_number == 0):
+        append_pop_configure_punches(sunday_punches, day_as_number, start_end_str)
+    elif (day_as_number == 1):
+        append_pop_configure_punches(monday_punches, day_as_number, start_end_str)
+    elif (day_as_number == 2):
+        append_pop_configure_punches(tuesday_punches, day_as_number, start_end_str)
+    elif (day_as_number == 3):
+        append_pop_configure_punches(wednesday_punches, day_as_number, start_end_str)
+    elif (day_as_number == 4):
+        append_pop_configure_punches(thursday_punches, day_as_number, start_end_str)
+    elif (day_as_number == 5):
+        append_pop_configure_punches(friday_punches, day_as_number, start_end_str)
+    else:
+        append_pop_configure_punches(saturday_punches, day_as_number, start_end_str)
+
+    update_global_daily_lists()
+
+    # Save punch data to file
+    data = {
+        "sunday_punches": sunday_punches,
+        "monday_punches": monday_punches,
+        "tuesday_punches": tuesday_punches,
+        "wednesday_punches": wednesday_punches,
+        "thursday_punches": thursday_punches,
+        "friday_punches": friday_punches,
+        "saturday_punches": saturday_punches
+    }
+
+    threading.Thread(target=write_punches_to_file, args=(data,)).start()
+
+def start_end():
+    global current_week
+    global readytostart
+    global curr_week_str
+    global can_clear
+    global start_time
+    global tracking
+    global timer_id
+    global paused
+    global p_focus_time
+    global p_break_time
+    global p_long_break_time
+    global p_cycle_count
+    global daily_weights
+
+    # Check if data exists in the previous week. If so then don't allow user to clock in and display message/notification
+    if (current_week != datetime.datetime.now().strftime("%U %Y") and current_week != -1):
+        app.weekly_daily_tabs.daily_tab.start_end_button.configure(state="disabled")
+        # Create a notification
+        notification.notify(
+            title="You've been clocked out!",
+            message="You've been clocked out due to being clocked in during a new week without clearing first.",
+            app_name="Productivity Tracker",
+            app_icon="icon4.ico",
+            timeout=10  
+        )
+        app.attributes("-topmost", True)
+        app.attributes("-topmost", False)
+        new_week_modal()
+    else:
+        can_clear = False
+        app.buttons_frame.send_weekly_data_button.configure(state="disabled")
+        app.buttons_frame.clear_weekly_data_button.configure(state="disabled")
+        app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.configure(state="disabled")
+
+        for i in range(7):
+            entry = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_weight_entries[i]
+            daily_weight = daily_weights[i]
+            
+            # Clear all weight entries that only have 0 in them
+            if (entry.get() != ""):
+                if (float(entry.get()) == 0):
+                    entry.delete(0, "end")
+
+            # If weight entered ends with ".", insert float from daily_weight
+            if (entry.get().endswith(".")):
+                entry.delete(0, "end")
+                entry.insert(0, str(daily_weight))
+
+            # Formatting for when clocked in
+            entry.configure(placeholder_text="NONE")
+            entry.configure(state="disabled")
+
+        if (readytostart):
+            # Clock In
+            readytostart = False
+            start_time = time.time()
+            tracking = True
+            app.weekly_daily_tabs.daily_tab.start_end_button.configure(text="End")
+            app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(state="normal")
+            
+            append_and_save_start_end_punch("Start: ")
+
+            # Save current week to curr_week_str if one isn't already set
+            if (curr_week_str == ""):
+                curr_week_str = get_date_range_for_current_week()
+                data = {
+                    "curr_week_str": curr_week_str
+                }
+                threading.Thread(target=write_current_week_to_file, args=(data,)).start()
+
+            # Do the same as above but for must clear file
+            if (current_week == -1):
+                current_week = datetime.datetime.now().strftime("%U %Y")
+                data = {
+                    "must_clear": must_clear,
+                    "current_week": current_week
+                }
+                threading.Thread(target=write_must_clear_to_file, args=(data,)).start()
+            
+            # Flush out timer if one is set and start clock
+            if (timer_id != ""):
+                app.after_cancel(timer_id)
+
+            # Begin Timer
+            update_time(True)
+        else:
+            # Clock Out
+            can_clear = True
+            
+            app.buttons_frame.send_weekly_data_button.configure(state="normal")
+            app.buttons_frame.clear_weekly_data_button.configure(state="normal")
+            app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.configure(state="normal")
+            
+            # Use local day_as_number in case of day change while program running
+            day_as_number = (datetime.datetime.now().weekday() + 1) % 7
+            daily_weight_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_weight_entries
+            # Flip and format weight entries depending on day
+            for i in range(7):
+                if (i == day_as_number):
+                    daily_weight_entries[i].configure(state="normal")
+                    daily_weight_entries[i].configure(placeholder_text="Enter Weight")
+                else:
+                    daily_weight_entries[i].configure(placeholder_text="NONE")
+                    daily_weight_entries[i].configure(state="disabled")
+
+            # Reset Buttons and Time Labels
+            app.weekly_daily_tabs.daily_tab.start_end_button.configure(text="Start")
+            app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(state="disabled")
+            app.weekly_daily_tabs.daily_tab.total_time_label.configure(text="00:00:00")
+            app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text="00:25:00")
+            app.weekly_daily_tabs.daily_tab.pause_resume_button.configure(text="Pause")
+            app.weekly_daily_tabs.daily_tab.pomodoro_count_label.configure(text="#1")
+            app.weekly_daily_tabs.daily_tab.pomodoro_focus_label.configure(text="Focus")
+
+            # Reset Vars
+            readytostart = True
+            paused = False
+            p_focus_time = focus_time
+            p_break_time = break_time
+            p_long_break_time = long_break_time
+            p_cycle_count = 1
+
+            append_and_save_start_end_punch("End: ")
+
+            # Flush out timer
+            app.after_cancel(timer_id)
+
+def get_operating_system():
+    global operating_system
+    # Determine operating system being used
+    if (platform.system() == "Linux"):
+        operating_system = "Linux"
+    else:
+        operating_system = "Windows"
 
 def center_window(window, window_width, window_height):
     window.update_idletasks()
@@ -250,17 +883,13 @@ def write_current_vars_to_walking_json():
 
     threading.Thread(target=write_walking_variables_to_file, args=(data,)).start()
 
-def write_walking_variables_to_file(data):
-    try:
-        with open("walking.json", "w") as file:
-            json.dump(data, file)
-    except Exception as e:
-        write_walking_variables_to_file(data)
-
 class ProgrammingFrame(CTk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
+
+        global daily_programming_times
+        global daily_punches
 
         # Title Label
         self.title = CTk.CTkLabel(self, text="Programming", fg_color="gray30")
@@ -285,17 +914,16 @@ class ProgrammingFrame(CTk.CTkFrame):
             label.grid(row=(i + 2), column=0, padx=(left_right_padding, 5), sticky="w")
         
         # Weekday Hour Entries
-        programming_times = [sunday_programming_time, monday_programming_time, tuesday_programming_time, wednesday_programming_time, thursday_programming_time, friday_programming_time, saturday_programming_time]
         self.programming_time_entries = []
         for i in range(7):
             entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
             entry.configure(state="disabled")
             entry.grid(row=(i + 2), column=1, padx=(5, 5))
 
-            if (programming_times[i] != 0):
-                hours = programming_times[i] // 3600
-                minutes = (programming_times[i] % 3600) // 60
-                seconds = programming_times[i] % 60
+            if (daily_programming_times[i] != 0):
+                hours = daily_programming_times[i] // 3600
+                minutes = (daily_programming_times[i] % 3600) // 60
+                seconds = daily_programming_times[i] % 60
                 programming_time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
                 entry.configure(state="normal")
                 entry.insert(0, programming_time_string)
@@ -304,7 +932,6 @@ class ProgrammingFrame(CTk.CTkFrame):
             self.programming_time_entries.append(entry)
         
         # Weekday Punches Option Menus
-        daily_punches = [sunday_punches, monday_punches, tuesday_punches, wednesday_punches, thursday_punches, friday_punches, saturday_punches]
         self.daily_punches_option_menus = []
         for i in range(7):
             option_menu = CTk.CTkOptionMenu(self, values=daily_punches[i])
@@ -332,17 +959,23 @@ class ProgrammingFrame(CTk.CTkFrame):
         option_menu.set("Punches")
 
     def save_description(self, event):
+        global description
         data = {
             "description": app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.get("1.0", "end-1c")
             }
         write_description_to_file(data)
-        global description
         description = data["description"]
 
 class ExerciseFrame(CTk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
+
+        global daily_weights
+        global daily_walking_times
+        global daily_distances
+        global daily_steps
+        global daily_calories
 
         left_right_padding = 0
         if (operating_system == "Linux"):
@@ -367,7 +1000,6 @@ class ExerciseFrame(CTk.CTkFrame):
             label.grid(row=(i + 2), column=0, padx=(left_right_padding, 5), sticky="w")
         
         # Weight Entries
-        daily_weights = [sunday_weight, monday_weight, tuesday_weight, wednesday_weight, thursday_weight, friday_weight, saturday_weight]
         self.daily_weight_entries = []
         for i in range(7):
             entry = CTk.CTkEntry(self, placeholder_text="Enter Weight", justify="center")
@@ -378,16 +1010,14 @@ class ExerciseFrame(CTk.CTkFrame):
                 weight_string = str(daily_weights[i])
                 entry.insert(0, weight_string)
 
-            if (i == day_as_number):
-                entry.configure(state="normal")
-            else:
+            day_as_number = (datetime.datetime.now().weekday() + 1) % 7
+            if (i != day_as_number):
                 entry.configure(placeholder_text="NONE")
                 entry.configure(state="disabled")
 
             self.daily_weight_entries.append(entry)
 
         # Time Walked Entries
-        daily_walking_times = [sunday_walking_time, monday_walking_time, tuesday_walking_time, wednesday_walking_time, thursday_walking_time, friday_walking_time, saturday_walking_time]
         self.daily_walking_entries = []
         for i in range(7):
             entry = CTk.CTkEntry(self, placeholder_text="00:00:00", justify="center")
@@ -406,9 +1036,6 @@ class ExerciseFrame(CTk.CTkFrame):
             self.daily_walking_entries.append(entry)
 
         # Distance, Steps, and Calories Entries
-        daily_distance_times = [sunday_walking_distance, monday_walking_distance, tuesday_walking_distance, wednesday_walking_distance, thursday_walking_distance, friday_walking_distance, saturday_walking_distance]
-        daily_steps = [sunday_walking_steps, monday_walking_steps, tuesday_walking_steps, wednesday_walking_steps, thursday_walking_steps, friday_walking_steps, saturday_walking_steps]
-        daily_calories = [sunday_calories, monday_calories, tuesday_calories, wednesday_calories, thursday_calories, friday_calories, saturday_calories]
         self.daily_distance_entries = []
         self.daily_steps_entries = []
         self.daily_calories_entries = []
@@ -426,8 +1053,8 @@ class ExerciseFrame(CTk.CTkFrame):
                 entry.grid(row=(j + 2), column=(i + 3), padx=(5, right_padding))
 
                 if (i == 0):
-                    if (daily_distance_times[j] != 0):
-                        walking_distance_string = str(daily_distance_times[j])
+                    if (daily_distances[j] != 0):
+                        walking_distance_string = str(daily_distances[j])
                         entry.configure(state="normal")
                         entry.insert(0, walking_distance_string)
                         entry.configure(state="disabled")
@@ -452,34 +1079,45 @@ class ExerciseFrame(CTk.CTkFrame):
 
                     self.daily_calories_entries.append(entry)
     
+        self.weight_as_float = 0
+
     def validate_float(self, event):
-        global weight_as_float
         weight_entry = event.widget
         try:
+            # if entry empty, insert "0"
             if (weight_entry.get() == ""):
                 weight_entry.delete(0, "end")
                 weight_entry.insert(0, "0")
 
+            # Delete first character (ex. 03.0 -> 3.0)
             if (weight_entry.get().startswith("0") and not weight_entry.get().endswith(".")):
                 weight_entry.delete(0)
 
-            weight_as_float = float(weight_entry.get())
-            self.assign_weight_to_correct_day(weight_entry, weight_as_float)
+            # Attempt to cast weight_entry to float then save
+            self.weight_as_float = float(weight_entry.get())
+            self.assign_weight_to_correct_day(weight_entry)
+            update_global_daily_lists()
+            self.calc_weight_loss()
             write_current_vars_to_walking_json()
 
         except ValueError:
+            # In the case of float conversion failing
             weight_entry = event.widget
+            # Insert 0 and save if entry is empty ("")
             if (weight_entry.get() == ""):
                 weight_entry.delete(0, "end")
                 weight_entry.insert(0, "0")
-                weight_as_float = float(weight_entry.get())
-                self.assign_weight_to_correct_day(weight_entry, weight_as_float)
+                self.weight_as_float = float(weight_entry.get())
+                self.assign_weight_to_correct_day(weight_entry)
+                update_global_daily_lists()
+                self.calc_weight_loss()
                 write_current_vars_to_walking_json()
             else:
+                # Revert to previous weight_as_float if character entered could not be casted as float
                 weight_entry.delete(0, "end")
-                weight_entry.insert(0, str(weight_as_float))
+                weight_entry.insert(0, str(self.weight_as_float))
 
-    def assign_weight_to_correct_day(self, widget, weight_as_float):
+    def assign_weight_to_correct_day(self, widget):
         global sunday_weight
         global monday_weight
         global tuesday_weight
@@ -488,21 +1126,67 @@ class ExerciseFrame(CTk.CTkFrame):
         global friday_weight
         global saturday_weight
 
-        widget_name = str(widget)
-        if ("1" in widget_name):
-            sunday_weight = weight_as_float
+        # Assign weight to correct global var
+        widget_name = str(widget).split(".")[6]
         if ("2" in widget_name):
-            monday_weight = weight_as_float
-        if ("3" in widget_name):
-            tuesday_weight = weight_as_float
-        if ("4" in widget_name):
-            wednesday_weight = weight_as_float
-        if ("5" in widget_name):
-            thursday_weight = weight_as_float
-        if ("6" in widget_name):
-            friday_weight = weight_as_float
-        if ("7" in widget_name):
-            saturday_weight = weight_as_float
+            monday_weight = self.weight_as_float
+        elif ("3" in widget_name):
+            tuesday_weight = self.weight_as_float
+        elif ("4" in widget_name):
+            wednesday_weight = self.weight_as_float
+        elif ("5" in widget_name):
+            thursday_weight = self.weight_as_float
+        elif ("6" in widget_name):
+            friday_weight = self.weight_as_float
+        elif ("7" in widget_name):
+            saturday_weight = self.weight_as_float
+        else:
+            # 1st entry doesn't have unique identifier
+            sunday_weight = self.weight_as_float
+
+    def calc_weight_loss(self):
+        global daily_weights
+        global total_weight_lost
+        
+        first_weight = 0
+        last_weight = 0
+        weigh_in_count = 0
+        
+        # Assign first weight to first non-empty weight entry
+        for i in range(7):
+            # Get first weight
+            if (first_weight == 0 and self.daily_weight_entries[i].get() != ""):
+                first_weight = daily_weights[i]
+            # Get last weight
+            if (self.daily_weight_entries[i].get() != ""):
+                last_weight = daily_weights[i]
+                weigh_in_count = weigh_in_count + 1
+        weight_lost_str = ""
+        #Check to make sure both vars are not equal
+        if (first_weight != last_weight):
+            weight_lost = first_weight - last_weight
+            weight_lost = round(weight_lost, 2)        
+            
+            # Choose whether to display positive or negative value depending on subtraction
+            if (weight_lost > 0):
+                weight_lost_str = "-" + str(weight_lost)
+            elif (weight_lost < 0):
+                weight_lost_str = "+" + str(abs(weight_lost))
+            
+            app.totals_frame.total_weight_lost_entry.configure(state="normal")
+            app.totals_frame.total_weight_lost_entry.delete(0, "end")
+            app.totals_frame.total_weight_lost_entry.insert(0, weight_lost_str)
+            app.totals_frame.total_weight_lost_entry.configure(state="disabled")
+            
+        # Check to make sure both vars set, if so then insert "0"
+        elif ((first_weight != 0 or last_weight != 0) and weigh_in_count > 1):
+            app.totals_frame.total_weight_lost_entry.configure(state="normal")
+            app.totals_frame.total_weight_lost_entry.delete(0, "end")
+            app.totals_frame.total_weight_lost_entry.insert(0, "0")
+            app.totals_frame.total_weight_lost_entry.configure(state="disabled")
+
+        # Set total_weight_lost
+        total_weight_lost = weight_lost_str
 
 class DailyFrame(CTk.CTkFrame):
     def __init__(self, master):
@@ -598,6 +1282,13 @@ class TotalsFrame(CTk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
+
+        global total_programming_time
+        global total_weight_lost
+        global total_walking_time
+        global total_walking_distance
+        global total_walking_steps
+        global total_calories
         
         # Title Label
         self.title = CTk.CTkLabel(self, text="Total Weekly Statistics", fg_color="gray30")
@@ -641,7 +1332,7 @@ class TotalsFrame(CTk.CTkFrame):
         self.total_weight_lost_entry.configure(state="disabled")
         self.total_weight_lost_entry.grid(row=2, column=2, padx=(50, 50), pady=(5,5))
 
-        if (total_weight_lost != 0):
+        if (total_weight_lost != ""):
             weight_lost_string = str(total_weight_lost)
             self.total_weight_lost_entry.configure(state="normal")
             self.total_weight_lost_entry.insert(0, weight_lost_string)
@@ -730,5 +1421,14 @@ class App(CTk.CTk):
         self.buttons_frame = ButtonsFrame(self)
         self.buttons_frame.grid(row=2, column=0)
 
+#Run app in dark mode
+get_operating_system()
+CTk.set_appearance_mode("dark")
+color = ""
+if (operating_system == "Linux"):
+    color = "green"
+else:
+    color = "dark-blue"
+CTk.set_default_color_theme(color)
 app = App()
 app.mainloop()
