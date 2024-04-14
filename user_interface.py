@@ -30,7 +30,14 @@ time_passed = 0
 timer_id = ""
 curr_week_str = ""
 
-# region handle loading variables from JSON files
+daily_programming_times = []
+daily_punches = []
+daily_weights = []
+daily_walking_times = []
+daily_distances = []
+daily_steps = []
+daily_calories = []
+
 file_path = "variables.json"
 # Check if the file exists
 if not os.path.isfile(file_path):
@@ -83,23 +90,20 @@ with open("variables.json", "r") as file:
 
 if ("thursday_programming_time" not in data):
     data = {
-            "thursday_programming_time": 0,
-            "friday_programming_time": 0,
-            "saturday_programming_time": 0,
             "sunday_programming_time": 0,
             "monday_programming_time": 0,
             "tuesday_programming_time": 0,
             "wednesday_programming_time": 0,
+            "thursday_programming_time": 0,
+            "friday_programming_time": 0,
+            "saturday_programming_time": 0,
             "total_programming_time": 0
             }
 
-thursday_programming_time = data["thursday_programming_time"]
-friday_programming_time = data["friday_programming_time"]
-saturday_programming_time = data["saturday_programming_time"]
-sunday_programming_time = data["sunday_programming_time"]
-monday_programming_time = data["monday_programming_time"]
-tuesday_programming_time = data["tuesday_programming_time"]
-wednesday_programming_time = data["wednesday_programming_time"]
+for key, value in data.items():
+    if ("total" not in key):
+        daily_programming_times.append(value)
+
 total_programming_time = data["total_programming_time"]
 
 # Open the JSON file
@@ -109,22 +113,17 @@ with open("punches.json", "r") as file:
 
 if ("thursday_punches" not in data):
     data = {
-            "thursday_punches": ["None"],
-            "friday_punches": ["None"],
-            "saturday_punches": ["None"],
             "sunday_punches": ["None"],
             "monday_punches": ["None"],
             "tuesday_punches": ["None"],
             "wednesday_punches": ["None"],
+            "thursday_punches": ["None"],
+            "friday_punches": ["None"],
+            "saturday_punches": ["None"],
             }
-
-thursday_punches = data["thursday_punches"]
-friday_punches = data["friday_punches"]
-saturday_punches = data["saturday_punches"]
-sunday_punches = data["sunday_punches"]
-monday_punches = data["monday_punches"]
-tuesday_punches = data["tuesday_punches"]
-wednesday_punches = data["wednesday_punches"]
+    
+for key, value in data.items():
+    daily_punches.append(value)
 
 # Open the JSON file
 with open("walking.json", "r") as file:
@@ -133,95 +132,76 @@ with open("walking.json", "r") as file:
 
 if ("thursday_walking_time" not in data):
     data = {
-            "thursday_weight": 0,
-            "friday_weight": 0,
-            "saturday_weight": 0,
             "sunday_weight": 0,
             "monday_weight": 0,
             "tuesday_weight": 0,
             "wednesday_weight": 0,
+            "thursday_weight": 0,
+            "friday_weight": 0,
+            "saturday_weight": 0,
             "total_weight_lost": 0,
 
-            "thursday_walking_time": 0,
-            "friday_walking_time": 0,
-            "saturday_walking_time": 0,
             "sunday_walking_time": 0,
             "monday_walking_time": 0,
             "tuesday_walking_time": 0,
             "wednesday_walking_time": 0,
+            "thursday_walking_time": 0,
+            "friday_walking_time": 0,
+            "saturday_walking_time": 0,
             "total_walking_time": 0,
 
-            "thursday_walking_distance": 0,
-            "friday_walking_distance": 0,
-            "saturday_walking_distance": 0,
             "sunday_walking_distance": 0,
             "monday_walking_distance": 0,
             "tuesday_walking_distance": 0,
             "wednesday_walking_distance": 0,
+            "thursday_walking_distance": 0,
+            "friday_walking_distance": 0,
+            "saturday_walking_distance": 0,
             "total_walking_distance": 0,
 
-            "thursday_walking_steps": 0,
-            "friday_walking_steps": 0,
-            "saturday_walking_steps": 0,
             "sunday_walking_steps": 0,
             "monday_walking_steps": 0,
             "tuesday_walking_steps": 0,
             "wednesday_walking_steps": 0,
+            "thursday_walking_steps": 0,
+            "friday_walking_steps": 0,
+            "saturday_walking_steps": 0,
             "total_walking_steps": 0,
 
-            "thursday_calories": 0,
-            "friday_calories": 0,
-            "saturday_calories": 0,
             "sunday_calories": 0,
             "monday_calories": 0,
             "tuesday_calories": 0,
             "wednesday_calories": 0,
+            "thursday_calories": 0,
+            "friday_calories": 0,
+            "saturday_calories": 0,
             "total_calories": 0
             }
 
-thursday_weight = data["thursday_weight"]
-friday_weight = data["friday_weight"]
-saturday_weight = data["saturday_weight"]
-sunday_weight = data["sunday_weight"]
-monday_weight = data["monday_weight"]
-tuesday_weight = data["tuesday_weight"]
-wednesday_weight = data["wednesday_weight"]
+for key, value in data.items():
+    if ("total" not in key and "weight" in key):
+        daily_weights.append(value)
+
+for key, value in data.items():
+    if ("total" not in key and "time" in key):
+        daily_walking_times.append(value)
+
+for key, value in data.items():
+    if ("total" not in key and "distance" in key):
+        daily_distances.append(value)
+
+for key, value in data.items():
+    if ("total" not in key and "steps" in key):
+        daily_steps.append(value)
+
+for key, value in data.items():
+    if ("total" not in key and "calories" in key):
+        daily_calories.append(value)
+
 total_weight_lost = data["total_weight_lost"]
-
-thursday_walking_time = data["thursday_walking_time"]
-friday_walking_time = data["friday_walking_time"]
-saturday_walking_time = data["saturday_walking_time"]
-sunday_walking_time = data["sunday_walking_time"]
-monday_walking_time = data["monday_walking_time"]
-tuesday_walking_time = data["tuesday_walking_time"]
-wednesday_walking_time = data["wednesday_walking_time"]
 total_walking_time = data["total_walking_time"]
-
-thursday_walking_distance = data["thursday_walking_distance"]
-friday_walking_distance = data["friday_walking_distance"]
-saturday_walking_distance = data["saturday_walking_distance"]
-sunday_walking_distance = data["sunday_walking_distance"]
-monday_walking_distance = data["monday_walking_distance"]
-tuesday_walking_distance = data["tuesday_walking_distance"]
-wednesday_walking_distance = data["wednesday_walking_distance"]
 total_walking_distance = data["total_walking_distance"]
-
-thursday_walking_steps = data["thursday_walking_steps"]
-friday_walking_steps = data["friday_walking_steps"]
-saturday_walking_steps = data["saturday_walking_steps"]
-sunday_walking_steps = data["sunday_walking_steps"]
-monday_walking_steps = data["monday_walking_steps"]
-tuesday_walking_steps = data["tuesday_walking_steps"]
-wednesday_walking_steps = data["wednesday_walking_steps"]
 total_walking_steps = data["total_walking_steps"]
-
-thursday_calories = data["thursday_calories"]
-friday_calories = data["friday_calories"]
-saturday_calories = data["saturday_calories"]
-sunday_calories = data["sunday_calories"]
-monday_calories = data["monday_calories"]
-tuesday_calories = data["tuesday_calories"]
-wednesday_calories = data["wednesday_calories"]
 total_calories = data["total_calories"]
 
 # Open the JSON file
@@ -261,47 +241,112 @@ if ("current_week_str" not in data):
     }
 
 curr_week_str = data["curr_week_str"]
-#endregion
-
-daily_programming_times = [sunday_programming_time, monday_programming_time, tuesday_programming_time, wednesday_programming_time, thursday_programming_time, friday_programming_time, saturday_programming_time]
-daily_punches = [sunday_punches, monday_punches, tuesday_punches, wednesday_punches, thursday_punches, friday_punches, saturday_punches]
-daily_weights = [sunday_weight, monday_weight, tuesday_weight, wednesday_weight, thursday_weight, friday_weight, saturday_weight]
-daily_walking_times = [sunday_walking_time, monday_walking_time, tuesday_walking_time, wednesday_walking_time, thursday_walking_time, friday_walking_time, saturday_walking_time]
-daily_distances = [sunday_walking_distance, monday_walking_distance, tuesday_walking_distance, wednesday_walking_distance, thursday_walking_distance, friday_walking_distance, saturday_walking_distance]
-daily_steps = [sunday_walking_steps, monday_walking_steps, tuesday_walking_steps, wednesday_walking_steps, thursday_walking_steps, friday_walking_steps, saturday_walking_steps]
-daily_calories = [sunday_calories, monday_calories, tuesday_calories, wednesday_calories, thursday_calories, friday_calories, saturday_calories]
 
 can_clear = True
 
 must_clear = False
 
-def send_data_modal():
-    pass
-def clear_data_modal():
-    pass
-def new_week_modal():
-    pass
-def walking():
-    pass
-def update_walking_stats():
-    pass
+current_weight = 0
+speed_in_mph = 2
+steps_per_mile = 2000
+met = 2.9
 
-def update_global_daily_lists():
-    global daily_programming_times
-    global daily_punches
-    global daily_weights
+def format_entry_time(entry, time):
+    hours = time // 3600
+    minutes = (time % 3600) // 60
+    seconds = time % 60
+    time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+    entry.configure(state="normal")
+    entry.delete(0, "end")
+    entry.insert(0, time_string)
+    entry.configure(state="disabled")
+
+def delete_and_insert_data_into_entry(entry, data):
+    entry.configure(state="normal")
+    entry.delete(0, "end")
+    entry.insert(0, str(data))
+    entry.configure(state="disabled")
+
+def walking(day_as_number):
     global daily_walking_times
     global daily_distances
     global daily_steps
     global daily_calories
+    global total_walking_time
+    global total_walking_distance
+    global total_walking_steps
+    global total_calories
+    global speed_in_mph
+    global steps_per_mile
+    global met
+    global current_weight
 
-    daily_programming_times = [sunday_programming_time, monday_programming_time, tuesday_programming_time, wednesday_programming_time, thursday_programming_time, friday_programming_time, saturday_programming_time]
-    daily_punches = [sunday_punches, monday_punches, tuesday_punches, wednesday_punches, thursday_punches, friday_punches, saturday_punches]
-    daily_weights = [sunday_weight, monday_weight, tuesday_weight, wednesday_weight, thursday_weight, friday_weight, saturday_weight]
-    daily_walking_times = [sunday_walking_time, monday_walking_time, tuesday_walking_time, wednesday_walking_time, thursday_walking_time, friday_walking_time, saturday_walking_time]
-    daily_distances = [sunday_walking_distance, monday_walking_distance, tuesday_walking_distance, wednesday_walking_distance, thursday_walking_distance, friday_walking_distance, saturday_walking_distance]
-    daily_steps = [sunday_walking_steps, monday_walking_steps, tuesday_walking_steps, wednesday_walking_steps, thursday_walking_steps, friday_walking_steps, saturday_walking_steps]
-    daily_calories = [sunday_calories, monday_calories, tuesday_calories, wednesday_calories, thursday_calories, friday_calories, saturday_calories]
+    # Access entry arrays easily
+    daily_walking_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_walking_entries
+    daily_distance_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_distance_entries
+    daily_steps_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_steps_entries
+    daily_calories_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_calories_entries
+    
+    # Set totals to 0 for recalculation
+    total_walking_distance = 0
+    total_walking_steps = 0
+    total_calories = 0
+    total_walking_time = 0
+    for i in range(7):
+        if (i == day_as_number):
+            # Increment time
+            daily_walking_times[i] = daily_walking_times[i] + 1
+            format_entry_time(daily_walking_entries[i], daily_walking_times[i])
+
+            # Get and display Distance
+            time_in_seconds = daily_walking_times[i]
+            time_in_hours = time_in_seconds / 3600
+            distance_in_miles = time_in_hours * speed_in_mph
+            distance_in_miles_rounded = round(distance_in_miles, 2)
+
+            daily_distances[i] = distance_in_miles_rounded
+            delete_and_insert_data_into_entry(daily_distance_entries[i], distance_in_miles_rounded)
+
+            # Get and display Steps
+            steps = distance_in_miles * steps_per_mile
+            steps_rounded = round(steps)
+
+            daily_steps[i] = steps_rounded
+            delete_and_insert_data_into_entry(daily_steps_entries[i], steps_rounded)
+
+            # Default weight set to 150 if one not set
+            if current_weight != 0:
+                weight_in_pounds = float(current_weight)
+            else:
+                weight_in_pounds = 150
+
+            # Get and display Calories
+            weight_in_kilograms = weight_in_pounds / 2.205
+            time = distance_in_miles/speed_in_mph
+            calories_burned = met * weight_in_kilograms * time
+            calories_burned_rounded = round(calories_burned, 2)
+
+            daily_calories[i] = calories_burned_rounded
+            delete_and_insert_data_into_entry(daily_calories_entries[i], calories_burned_rounded)
+
+        # Calculate Totals
+        total_walking_time = total_walking_time + daily_walking_times[i]
+        total_walking_distance = total_walking_distance + daily_distances[i]
+        total_walking_steps = total_walking_steps + daily_steps[i]
+        total_calories = total_calories + daily_calories[i]
+
+    # Format and display totals
+    format_entry_time(app.totals_frame.time_walked_entry, total_walking_time)
+
+    total_walking_distance = round(total_walking_distance, 2)
+    total_walking_steps = round(total_walking_steps, 2)
+    total_calories = round(total_calories, 2)
+
+    delete_and_insert_data_into_entry(app.totals_frame.total_walking_stats[0], total_walking_distance)
+    delete_and_insert_data_into_entry(app.totals_frame.total_walking_stats[1], total_walking_steps)
+    delete_and_insert_data_into_entry(app.totals_frame.total_walking_stats[2], total_calories)
+
+    write_current_vars_to_walking_json()
 
 def pause_resume():
     global paused
@@ -411,6 +456,8 @@ def handle_being_clocked_in_past_saturday_midnight():
     global long_break_time
     global p_cycle_count
     global tracking
+    global must_clear
+    global daily_punches
 
     # Test to see if current week is equal to the week we get now, if not then user must delete data
     week_num = datetime.datetime.now().strftime("%U %Y")
@@ -439,25 +486,12 @@ def handle_being_clocked_in_past_saturday_midnight():
         p_cycle_count = 1
 
         # Spoof Punchout on Saturday 11:59:59 PM 
-        saturday_punches.append("End: 11:59:59 PM")
-        if (saturday_punches[0] == "None"):
-            saturday_punches.pop(0)
-        app.weekly_daily_tabs.weekly_tab.programming_frame.daily_punches_option_menus[6].configure(values=saturday_punches)
+        daily_punches[6].append("End: 11:59:59 PM")
+        if (daily_punches[6][0] == "None"):
+            daily_punches[6].pop(0)
+        app.weekly_daily_tabs.weekly_tab.programming_frame.daily_punches_option_menus[6].configure(values=daily_punches[6])
 
-        update_global_daily_lists()
-
-        # Save data to file
-        data = {
-        "thursday_punches": thursday_punches,
-        "friday_punches": friday_punches,
-        "saturday_punches": saturday_punches,
-        "sunday_punches": sunday_punches,
-        "monday_punches": monday_punches,
-        "tuesday_punches": tuesday_punches,
-        "wednesday_punches": wednesday_punches,
-        }
-
-        threading.Thread(target=write_punches_to_file, args=(data,)).start()
+        write_current_vars_to_punches_json()
 
         create_notification("You've been clocked out!", "You've been clocked out due to being clocked in during a new week without clearing first.")
 
@@ -466,12 +500,7 @@ def handle_being_clocked_in_past_saturday_midnight():
         # Save must_clear as true so the user will have to clear before they clock in again
         must_clear = True
 
-        data = {
-            "must_clear": must_clear,
-            "current_week": current_week
-        }
-
-        threading.Thread(target=write_must_clear_to_file, args=(data,)).start()
+        write_current_vars_to_must_clear_json()
 
         # Break out of time tracker
         tracking = False
@@ -521,14 +550,15 @@ def update_time(firstpass):
             time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
             app.weekly_daily_tabs.daily_tab.total_time_label.configure(text=time_string)
             
+            # Use local day_as_number in case of day change while program running
+            day_as_number = (datetime.datetime.now().weekday() + 1) % 7
+
             # Call functions that handle selected options
             if (app.weekly_daily_tabs.daily_tab.pomodoro_switch.get() == 1):
                 pomodoro()
-            walking()
-            update_walking_stats()
+            if (app.weekly_daily_tabs.daily_tab.walking_switch.get() == 1):
+                walking(day_as_number)
             
-            # Use local day_as_number in case of day change while program running
-            day_as_number = (datetime.datetime.now().weekday() + 1) % 7
             programming_time_entries = app.weekly_daily_tabs.weekly_tab.programming_frame.programming_time_entries
             for i in range(7):
                 # Add time to current day
@@ -536,27 +566,14 @@ def update_time(firstpass):
                     daily_programming_times[i] = daily_programming_times[i] + 1
                     format_entry_time(programming_time_entries[i], daily_programming_times[i])
                     
-            update_global_daily_lists()
-
             # Calculate total programming time
+            total_programming_time = 0
             for i in range(7):
                 total_programming_time = total_programming_time + daily_programming_times[i]
             
             format_entry_time(app.totals_frame.time_programming_entry, total_programming_time)
 
-            # Write programming times to file
-            data = {
-                "thursday_programming_time": thursday_programming_time,
-                "friday_programming_time": friday_programming_time,
-                "saturday_programming_time": saturday_programming_time,
-                "sunday_programming_time": sunday_programming_time,
-                "monday_programming_time": monday_programming_time,
-                "tuesday_programming_time": tuesday_programming_time,
-                "wednesday_programming_time": wednesday_programming_time,
-                "total_programming_time": total_programming_time,
-            }
-
-            threading.Thread(target=write_variables_to_file, args=(data,)).start()
+            write_current_vars_to_variables_json()
 
         # Recursively call update_time every second. Save timer in timer_id
         timer_id = app.after(1000, update_time, False)
@@ -660,34 +677,21 @@ def append_and_save_start_end_punch(start_end_str):
 
     # Call function with different parameters based on day
     if (day_as_number == 0):
-        append_pop_configure_punches(sunday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[0], day_as_number, start_end_str)
     elif (day_as_number == 1):
-        append_pop_configure_punches(monday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[1], day_as_number, start_end_str)
     elif (day_as_number == 2):
-        append_pop_configure_punches(tuesday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[2], day_as_number, start_end_str)
     elif (day_as_number == 3):
-        append_pop_configure_punches(wednesday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[3], day_as_number, start_end_str)
     elif (day_as_number == 4):
-        append_pop_configure_punches(thursday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[4], day_as_number, start_end_str)
     elif (day_as_number == 5):
-        append_pop_configure_punches(friday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[5], day_as_number, start_end_str)
     else:
-        append_pop_configure_punches(saturday_punches, day_as_number, start_end_str)
+        append_pop_configure_punches(daily_punches[6], day_as_number, start_end_str)
 
-    update_global_daily_lists()
-
-    # Save punch data to file
-    data = {
-        "sunday_punches": sunday_punches,
-        "monday_punches": monday_punches,
-        "tuesday_punches": tuesday_punches,
-        "wednesday_punches": wednesday_punches,
-        "thursday_punches": thursday_punches,
-        "friday_punches": friday_punches,
-        "saturday_punches": saturday_punches
-    }
-
-    threading.Thread(target=write_punches_to_file, args=(data,)).start()
+    write_current_vars_to_punches_json()
 
 def start_end():
     global current_week
@@ -707,16 +711,9 @@ def start_end():
     # Check if data exists in the previous week. If so then don't allow user to clock in and display message/notification
     if (current_week != datetime.datetime.now().strftime("%U %Y") and current_week != -1):
         app.weekly_daily_tabs.daily_tab.start_end_button.configure(state="disabled")
-        # Create a notification
-        notification.notify(
-            title="You've been clocked out!",
-            message="You've been clocked out due to being clocked in during a new week without clearing first.",
-            app_name="Productivity Tracker",
-            app_icon="icon4.ico",
-            timeout=10  
-        )
-        app.attributes("-topmost", True)
-        app.attributes("-topmost", False)
+        
+        create_notification("You've been clocked out!", "You've been clocked out due to being clocked in during a new week without clearing first.")
+        
         new_week_modal()
     else:
         can_clear = False
@@ -833,55 +830,807 @@ def center_window(window, window_width, window_height):
     y = (screen_height - window_height) // 2
     window.geometry(f"+{x}+{y}")
 
-def write_current_vars_to_walking_json():
+def write_current_vars_to_variables_json():
     data = {
-        "thursday_weight": thursday_weight,
-        "friday_weight": friday_weight,
-        "saturday_weight": saturday_weight,
-        "sunday_weight": sunday_weight,
-        "monday_weight": monday_weight,
-        "tuesday_weight": tuesday_weight,
-        "wednesday_weight": wednesday_weight,
+        "thursday_programming_time": daily_programming_times[0],
+        "friday_programming_time": daily_programming_times[1],
+        "saturday_programming_time": daily_programming_times[2],
+        "sunday_programming_time": daily_programming_times[3],
+        "monday_programming_time": daily_programming_times[4],
+        "tuesday_programming_time": daily_programming_times[5],
+        "wednesday_programming_time": daily_programming_times[6],
+        "total_programming_time": total_programming_time,
+    }
+
+    threading.Thread(target=write_variables_to_file, args=(data,)).start()
+
+def write_current_vars_to_punches_json():
+    data = {
+        "sunday_punches": daily_punches[0],
+        "monday_punches": daily_punches[1],
+        "tuesday_punches": daily_punches[2],
+        "wednesday_punches": daily_punches[3],
+        "thursday_punches": daily_punches[4],
+        "friday_punches": daily_punches[5],
+        "saturday_punches": daily_punches[6]
+    }
+
+    threading.Thread(target=write_punches_to_file, args=(data,)).start()
+
+def write_current_vars_to_walking_json():
+    global daily_weights
+    global daily_walking_times
+    global daily_distances
+    global daily_steps
+    global daily_calories
+    global total_weight_lost
+    global total_walking_time
+    global total_walking_distance
+    global total_walking_steps
+    global total_calories
+
+    data = {
+        "sunday_weight": daily_weights[0],
+        "monday_weight": daily_weights[1],
+        "tuesday_weight": daily_weights[2],
+        "wednesday_weight": daily_weights[3],
+        "thursday_weight": daily_weights[4],
+        "friday_weight": daily_weights[5],
+        "saturday_weight": daily_weights[6],
         "total_weight_lost": total_weight_lost,
 
-        "thursday_walking_time": thursday_walking_time,
-        "friday_walking_time": friday_walking_time,
-        "saturday_walking_time": saturday_walking_time,
-        "sunday_walking_time": sunday_walking_time,
-        "monday_walking_time": monday_walking_time,
-        "tuesday_walking_time": tuesday_walking_time,
-        "wednesday_walking_time": wednesday_walking_time,
+        "sunday_walking_time": daily_walking_times[0],
+        "monday_walking_time": daily_walking_times[1],
+        "tuesday_walking_time": daily_walking_times[2],
+        "wednesday_walking_time": daily_walking_times[3],
+        "thursday_walking_time": daily_walking_times[4],
+        "friday_walking_time": daily_walking_times[5],
+        "saturday_walking_time": daily_walking_times[6],
         "total_walking_time": total_walking_time,
 
-        "thursday_walking_distance": thursday_walking_distance,
-        "friday_walking_distance": friday_walking_distance,
-        "saturday_walking_distance": saturday_walking_distance,
-        "sunday_walking_distance": sunday_walking_distance,
-        "monday_walking_distance": monday_walking_distance,
-        "tuesday_walking_distance": tuesday_walking_distance,
-        "wednesday_walking_distance": wednesday_walking_distance,
+        "sunday_walking_distance": daily_distances[0],
+        "monday_walking_distance": daily_distances[1],
+        "tuesday_walking_distance": daily_distances[2],
+        "wednesday_walking_distance": daily_distances[3],
+        "thursday_walking_distance": daily_distances[4],
+        "friday_walking_distance": daily_distances[5],
+        "saturday_walking_distance": daily_distances[6],
         "total_walking_distance": total_walking_distance,
 
-        "thursday_walking_steps": thursday_walking_steps,
-        "friday_walking_steps": friday_walking_steps,
-        "saturday_walking_steps": saturday_walking_steps,
-        "sunday_walking_steps": sunday_walking_steps,
-        "monday_walking_steps": monday_walking_steps,
-        "tuesday_walking_steps": tuesday_walking_steps,
-        "wednesday_walking_steps": wednesday_walking_steps,
+        "sunday_walking_steps": daily_steps[0],
+        "monday_walking_steps": daily_steps[1],
+        "tuesday_walking_steps": daily_steps[2],
+        "wednesday_walking_steps": daily_steps[3],
+        "thursday_walking_steps": daily_steps[4],
+        "friday_walking_steps": daily_steps[5],
+        "saturday_walking_steps": daily_steps[6],
         "total_walking_steps": total_walking_steps,
 
-        "thursday_calories": thursday_calories,
-        "friday_calories": friday_calories,
-        "saturday_calories": saturday_calories,
-        "sunday_calories": sunday_calories,
-        "monday_calories": monday_calories,
-        "tuesday_calories": tuesday_calories,
-        "wednesday_calories": wednesday_calories,
+        "sunday_calories": daily_calories[0],
+        "monday_calories": daily_calories[1],
+        "tuesday_calories": daily_calories[2],
+        "wednesday_calories": daily_calories[3],
+        "thursday_calories": daily_calories[4],
+        "friday_calories": daily_calories[5],
+        "saturday_calories": daily_calories[6],
         "total_calories": total_calories
-        }
+    }
 
     threading.Thread(target=write_walking_variables_to_file, args=(data,)).start()
+
+def write_current_vars_to_must_clear_json():
+        data = {
+            "must_clear": must_clear,
+            "current_week": current_week
+        }
+
+        threading.Thread(target=write_must_clear_to_file, args=(data,)).start()
+
+def clear_data():
+    # Check if files exist
+    variables_path = "variables.json"
+    punches_path = "punches.json"
+    walking_path = "walking.json"
+    description_path = "description.json"
+    must_clear_path = "must_clear.json"
+    current_week_path = "current_week.json"
+    # Check if the file exists
+    if (os.path.isfile(variables_path) and os.path.isfile(punches_path) and os.path.isfile(walking_path) and os.path.isfile(description_path) and os.path.isfile(must_clear_path) and os.path.isfile(current_week_path)):
+        # Check that not tracking (this needs to be fixed, currently it only works on boot)
+        global can_clear
+        if (can_clear):
+            # Reset all UI fields
+
+            # Time Programming Fields
+            programming_time_entries = app.weekly_daily_tabs.weekly_tab.programming_frame.programming_time_entries
+            daily_punches_option_menus = app.weekly_daily_tabs.weekly_tab.programming_frame.daily_punches_option_menus
+            daily_weight_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_weight_entries
+            daily_walking_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_walking_entries
+            daily_distance_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_distance_entries
+            daily_steps_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_steps_entries
+            daily_calories_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_calories_entries
+            for i in range(7):
+                programming_time_entries[i].configure(state="normal")
+                programming_time_entries[i].delete(0, "end")
+                programming_time_entries[i].configure(placeholder_text="00:00:00")
+                programming_time_entries[i].configure(state="disabled")
+                daily_punches_option_menus[i].configure(values=["None"])
+                daily_weight_entries[i].configure(state="normal")
+                daily_weight_entries[i].delete(0, "end")
+                daily_weight_entries[i].configure(placeholder_text="Enter Weight")
+                daily_weight_entries[i].configure(state="disabled")
+                daily_walking_entries[i].configure(state="normal")
+                daily_walking_entries[i].delete(0, "end")
+                daily_walking_entries[i].configure(placeholder_text="00:00:00")
+                daily_walking_entries[i].configure(state="disabled")
+                daily_distance_entries[i].configure(state="normal")
+                daily_distance_entries[i].delete(0, "end")
+                daily_distance_entries[i].configure(placeholder_text="0")
+                daily_distance_entries[i].configure(state="disabled")
+                daily_steps_entries[i].configure(state="normal")
+                daily_steps_entries[i].delete(0, "end")
+                daily_steps_entries[i].configure(placeholder_text="0")
+                daily_steps_entries[i].configure(state="disabled")
+                daily_calories_entries[i].configure(state="normal")
+                daily_calories_entries[i].delete(0, "end")
+                daily_calories_entries[i].configure(placeholder_text="0")
+                daily_calories_entries[i].configure(state="disabled")
+
+            # Description Field
+            app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.delete("1.0", "end-1c")
+            placeholder_string = "INSTRUCTIONS:\n\n- Edit the .env file in the dist folder to include any discord webhooks that you want to send data to.\n\n- Use the Start Button in the Daily Tracker Tab to clock in.\n\n- Once you clock in, you'll have the option to pause or resume your session.\n\n- End your session by clicking the End Button\n\n- When you aren't in a session, you'll have the ability to Send Weekly Data and Clear Weekly Data.\n\n- Sending weekly data sends your data to the discord by using webhooks. Your data will be automatically formatted to be readable and will show what dates the week covered.\n\n- Clearing Weekly Data will erase everything and set it all back to default. This will mostly be used when you want to start a new week. Be sure to send your data before doing this.\n\n- The Walking and Pomodoro switches are options that you can add to your session.\n\n- Walking assumes you are walking on a treadmill at 2mph and tracks your distance, steps, and calories burned. Calories burned are determined by the weight that you enter in the Weekly Log Exercising Tab. \n\n- Pomodoro pauses and gives a notification everytime the timer runs out. The timers go as follows: 25, 5, 25, 5, 25, 5, 25, 15\n\n- You'll only be able to type in this text box when you're not in a session. Erasing these instructions and typing a new message will save your new message."        
+            app.weekly_daily_tabs.weekly_tab.programming_frame.description_textbox.insert(0.0, placeholder_string)
+
+            # Totals Fields
+            app.totals_frame.time_programming_entry.configure(state="normal")
+            app.totals_frame.time_programming_entry.delete(0, "end")
+            app.totals_frame.time_programming_entry.configure(placeholder_text="00:00:00")
+            app.totals_frame.time_programming_entry.configure(state="disabled")
+
+            app.totals_frame.total_weight_lost_entry.configure(state="normal")
+            app.totals_frame.total_weight_lost_entry.delete(0, "end")
+            app.totals_frame.total_weight_lost_entry.configure(placeholder_text="0")
+            app.totals_frame.total_weight_lost_entry.configure(state="disabled")
+
+            app.totals_frame.time_walked_entry.configure(state="normal")
+            app.totals_frame.time_walked_entry.delete(0, "end")
+            app.totals_frame.time_walked_entry.configure(placeholder_text="00:00:00")
+            app.totals_frame.time_walked_entry.configure(state="disabled")
+
+            app.totals_frame.distance_entry.configure(state="normal")
+            app.totals_frame.distance_entry.delete(0, "end")
+            app.totals_frame.distance_entry.configure(placeholder_text="0")
+            app.totals_frame.distance_entry.configure(state="disabled")
+
+            app.totals_frame.steps_entry.configure(state="normal")
+            app.totals_frame.steps_entry.delete(0, "end")
+            app.totals_frame.steps_entry.configure(placeholder_text="0")
+            app.totals_frame.steps_entry.configure(state="disabled")
+
+            app.totals_frame.calories_burned_entry.configure(state="normal")
+            app.totals_frame.calories_burned_entry.delete(0, "end")
+            app.totals_frame.calories_burned_entry.configure(placeholder_text="0")
+            app.totals_frame.calories_burned_entry.configure(state="disabled")
+
+            # Reinitialze vars in json files like on first boot
+            data = {
+                    "thursday_programming_time": 0,
+                    "friday_programming_time": 0,
+                    "saturday_programming_time": 0,
+                    "sunday_programming_time": 0,
+                    "monday_programming_time": 0,
+                    "tuesday_programming_time": 0,
+                    "wednesday_programming_time": 0,
+                    "total_programming_time": 0
+                    }
+            
+            write_variables_to_file(data)
+
+            global thursday_programming_time
+            global friday_programming_time
+            global saturday_programming_time
+            global sunday_programming_time
+            global monday_programming_time
+            global tuesday_programming_time
+            global wednesday_programming_time
+            global total_programming_time
+
+            thursday_programming_time = data["thursday_programming_time"]
+            friday_programming_time = data["friday_programming_time"]
+            saturday_programming_time = data["saturday_programming_time"]
+            sunday_programming_time = data["sunday_programming_time"]
+            monday_programming_time = data["monday_programming_time"]
+            tuesday_programming_time = data["tuesday_programming_time"]
+            wednesday_programming_time = data["wednesday_programming_time"]
+            total_programming_time = data["total_programming_time"]
+
+            data = {
+                    "thursday_punches": ["None"],
+                    "friday_punches": ["None"],
+                    "saturday_punches": ["None"],
+                    "sunday_punches": ["None"],
+                    "monday_punches": ["None"],
+                    "tuesday_punches": ["None"],
+                    "wednesday_punches": ["None"],
+                    }
+            
+            write_punches_to_file(data)
+
+            thursday_punches = data["thursday_punches"]
+            friday_punches = data["friday_punches"]
+            saturday_punches = data["saturday_punches"]
+            sunday_punches = data["sunday_punches"]
+            monday_punches = data["monday_punches"]
+            tuesday_punches = data["tuesday_punches"]
+            wednesday_punches = data["wednesday_punches"]
+
+            data = {
+                    "thursday_weight": 0,
+                    "friday_weight": 0,
+                    "saturday_weight": 0,
+                    "sunday_weight": 0,
+                    "monday_weight": 0,
+                    "tuesday_weight": 0,
+                    "wednesday_weight": 0,
+                    "total_weight_lost": 0,
+
+                    "thursday_walking_time": 0,
+                    "friday_walking_time": 0,
+                    "saturday_walking_time": 0,
+                    "sunday_walking_time": 0,
+                    "monday_walking_time": 0,
+                    "tuesday_walking_time": 0,
+                    "wednesday_walking_time": 0,
+                    "total_walking_time": 0,
+
+                    "thursday_walking_distance": 0,
+                    "friday_walking_distance": 0,
+                    "saturday_walking_distance": 0,
+                    "sunday_walking_distance": 0,
+                    "monday_walking_distance": 0,
+                    "tuesday_walking_distance": 0,
+                    "wednesday_walking_distance": 0,
+                    "total_walking_distance": 0,
+
+                    "thursday_walking_steps": 0,
+                    "friday_walking_steps": 0,
+                    "saturday_walking_steps": 0,
+                    "sunday_walking_steps": 0,
+                    "monday_walking_steps": 0,
+                    "tuesday_walking_steps": 0,
+                    "wednesday_walking_steps": 0,
+                    "total_walking_steps": 0,
+
+                    "thursday_calories": 0,
+                    "friday_calories": 0,
+                    "saturday_calories": 0,
+                    "sunday_calories": 0,
+                    "monday_calories": 0,
+                    "tuesday_calories": 0,
+                    "wednesday_calories": 0,
+                    "total_calories": 0
+                    }
+
+            write_walking_variables_to_file(data)
+
+            global thursday_weight
+            global friday_weight
+            global saturday_weight
+            global sunday_weight
+            global monday_weight
+            global tuesday_weight
+            global wednesday_weight
+            global total_weight_lost
+
+            thursday_weight = data["thursday_weight"]
+            friday_weight = data["friday_weight"]
+            saturday_weight = data["saturday_weight"]
+            sunday_weight = data["sunday_weight"]
+            monday_weight = data["monday_weight"]
+            tuesday_weight = data["tuesday_weight"]
+            wednesday_weight = data["wednesday_weight"]
+            total_weight_lost = data["total_weight_lost"]
+
+            global thursday_walking_time
+            global friday_walking_time
+            global saturday_walking_time
+            global sunday_walking_time
+            global monday_walking_time
+            global tuesday_walking_time
+            global wednesday_walking_time
+            global total_walking_time
+
+            thursday_walking_time = data["thursday_walking_time"]
+            friday_walking_time = data["friday_walking_time"]
+            saturday_walking_time = data["saturday_walking_time"]
+            sunday_walking_time = data["sunday_walking_time"]
+            monday_walking_time = data["monday_walking_time"]
+            tuesday_walking_time = data["tuesday_walking_time"]
+            wednesday_walking_time = data["wednesday_walking_time"]
+            total_walking_time = data["total_walking_time"]
+
+            global thursday_walking_distance
+            global friday_walking_distance
+            global saturday_walking_distance
+            global sunday_walking_distance
+            global monday_walking_distance
+            global tuesday_walking_distance
+            global wednesday_walking_distance
+            global total_walking_distance
+
+            thursday_walking_distance = data["thursday_walking_distance"]
+            friday_walking_distance = data["friday_walking_distance"]
+            saturday_walking_distance = data["saturday_walking_distance"]
+            sunday_walking_distance = data["sunday_walking_distance"]
+            monday_walking_distance = data["monday_walking_distance"]
+            tuesday_walking_distance = data["tuesday_walking_distance"]
+            wednesday_walking_distance = data["wednesday_walking_distance"]
+            total_walking_distance = data["total_walking_distance"]
+
+            global thursday_walking_steps
+            global friday_walking_steps
+            global saturday_walking_steps
+            global sunday_walking_steps
+            global monday_walking_steps
+            global tuesday_walking_steps
+            global wednesday_walking_steps
+            global total_walking_steps
+
+            thursday_walking_steps = data["thursday_walking_steps"]
+            friday_walking_steps = data["friday_walking_steps"]
+            saturday_walking_steps = data["saturday_walking_steps"]
+            sunday_walking_steps = data["sunday_walking_steps"]
+            monday_walking_steps = data["monday_walking_steps"]
+            tuesday_walking_steps = data["tuesday_walking_steps"]
+            wednesday_walking_steps = data["wednesday_walking_steps"]
+            total_walking_steps = data["total_walking_steps"]
+
+            global thursday_calories
+            global friday_calories
+            global saturday_calories
+            global sunday_calories
+            global monday_calories
+            global tuesday_calories
+            global wednesday_calories
+            global total_calories
+
+            thursday_calories = data["thursday_calories"]
+            friday_calories = data["friday_calories"]
+            saturday_calories = data["saturday_calories"]
+            sunday_calories = data["sunday_calories"]
+            monday_calories = data["monday_calories"]
+            tuesday_calories = data["tuesday_calories"]
+            wednesday_calories = data["wednesday_calories"]
+            total_calories = data["total_calories"]
+
+            data = {
+                "description": ""
+            }
+
+            write_description_to_file(data)
+
+            global description
+            description = data["description"]
+
+            data = {
+                "must_clear": False,
+                "current_week": -1
+            }
+
+            write_must_clear_to_file(data)
+
+            global must_clear
+            global current_week
+
+            must_clear = data["must_clear"]
+            current_week = data["current_week"]
+
+            data = {
+                "curr_week_str": ""
+            }
+
+            write_current_week_to_file(data)
+
+            global curr_week_str
+            curr_week_str = data["curr_week_str"]
+
+            # Reset Variables in Memory in case user doesn't reboot program
+            # Settings Vars
+            global tracking
+            global pomodoro_break
+            global readytostart
+            global paused
+            global p_string_store
+            global focus_time
+            global break_time
+            global long_break_time
+            global p_focus_time
+            global p_break_time
+            global p_long_break_time
+            global p_cycle_count
+            global start_time
+            global time_passed
+            global timer_id
+
+            tracking = False
+            pomodoro_break = False
+            readytostart = True
+            paused = False
+            p_string_store = ""
+            focus_time = 1500
+            break_time = 300
+            long_break_time = 900
+            p_focus_time = 1500
+            p_break_time = 300
+            p_long_break_time = 900
+            p_cycle_count = 1
+            start_time = 0
+            time_passed = 0
+            timer_id = ""
+            curr_week_str = ""
+
+            global current_weight
+            current_weight = 0
+
+            can_clear = True
+
+            global sunday_weight_as_float
+            global monday_weight_as_float
+            global tuesday_weight_as_float
+            global wednesday_weight_as_float
+            global thursday_weight_as_float
+            global friday_weight_as_float
+            global saturday_weight_as_float
+
+            sunday_weight_as_float = 0
+            monday_weight_as_float = 0
+            tuesday_weight_as_float = 0
+            wednesday_weight_as_float = 0
+            thursday_weight_as_float = 0
+            friday_weight_as_float = 0
+            saturday_weight_as_float = 0
+
+            app.weekly_daily_tabs.daily_tab.start_end_button.configure(state="normal")
+
+def append_distance_steps_calories_to_message(entry):
+    text_to_send_exercise = ""
+    if (entry.get() != ""):
+        text_to_send_exercise += entry.get()
+    else: 
+        text_to_send_exercise += "0"
+
+    return text_to_send_exercise
+
+def send_data(webhook_arr, filename, text):
+    if (webhook_arr == "None"):
+        pass
+    else:
+        webhook_arr = webhook_arr.split(",")
+        for i in webhook_arr:
+            webhook_str = i
+
+            webhook = discord.SyncWebhook.from_url('https://discord.com/api/webhooks/https://discord.com/api/webhooks/' + webhook_str) # Initializing webhook
+
+            with open(file=filename, mode='rb') as f:
+                my_file = discord.File(f)
+
+            webhook.send(text, file=my_file)
+
+def send_data_modal():
+    modal_dialog = CTk.CTkToplevel(app)
+    if (operating_system == "Linux"):
+        modal_dialog.wait_visibility()
+    else:
+        pass
+    modal_dialog.grab_set()
+    modal_dialog.geometry("800x490")
+    modal_dialog.title("Send Data")
+    if (operating_system == "Linux"):
+        pass
+    else:
+        modal_dialog.after(250, lambda: modal_dialog.iconbitmap("icon4.ico"))
+    center_window(modal_dialog, 800, 490)
+    modal_dialog.grid_columnconfigure(0, weight=1)
+
+    # Display message as labels
+    label = CTk.CTkLabel(modal_dialog, text="Preview of data to be sent:")
+    label.grid(row=0, column=0, pady=(10,0))
+
+    tab_view = CTk.CTkTabview(modal_dialog, fg_color="transparent")
+    tab_view.add("Programming Data")
+    tab_view.add("Exercise Data")
+    tab_view.grid(row=1, column=0, columnspan=4, sticky="we")
+
+    # Make correct week display if data is from previous week
+    current_week_range = ""
+    if (curr_week_str != ""):
+        current_week_range = curr_week_str
+    else:
+        current_week_range = get_date_range_for_current_week()
+
+    # Time Worked Each Day
+    text_to_send = ""
+    text_to_send += "DATES:\n"
+    text_to_send += current_week_range
+    text_to_send += "\n\nTIME WORKED EACH DAY:"
+
+    days_as_strings = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    # Write Programming Times
+    programming_time_entries = app.weekly_daily_tabs.weekly_tab.programming_frame.programming_time_entries
+    daily_punches_option_menus = app.weekly_daily_tabs.weekly_tab.programming_frame.daily_punches_option_menus
+    programming_times_strings = []
+    punches_times_strings = []
+    for i in range(7):
+        text_to_send += "\n" + days_as_strings[i] + " - Time Worked: "
+        if (programming_time_entries[i].get() != ""):
+            text_to_send += programming_time_entries[i].get()
+            programming_times_strings.append(programming_time_entries[i].get())
+        else:
+            text_to_send += "00:00:00"
+            programming_times_strings.append("00:00:00")
+        text_to_send += ", Punches: "
+        count = 0
+        punches_str = ""
+        for j in daily_punches_option_menus[i]._values:
+            count += 1
+            text_to_send += j
+            punches_str += j
+            if (count != len(daily_punches_option_menus[i]._values)):
+                text_to_send += ", "
+                punches_str += ", "
+        punches_times_strings.append(punches_str)
+
+    #Total Time Worked
+    text_to_send += "\n\nTOTAL TIME WORKED:\n"
+    total_str_time_worked = ""
+    if (app.totals_frame.time_programming_entry.get() != ""):
+        text_to_send += app.totals_frame.time_programming_entry.get()
+        total_str_time_worked = app.totals_frame.time_programming_entry.get()
+    else:
+        text_to_send += "00:00:00"
+        total_str_time_worked = "00:00:00"
+
+    #Description
+    text_to_send += "\n\nDESCRIPTION:\n"
+    description_str = ""
+    if (description != ""):
+        text_to_send += description
+        description_str = description
+    else:
+        text_to_send += "No description given..."
+        description_str = "No description given..."
+
+    #Textbox to preview programming data that will be sent
+    textbox = CTk.CTkTextbox(tab_view.tab("Programming Data"), wrap="word", height=350, width=750)
+    textbox.pack()
+    textbox.insert(1.0, text_to_send)
+    textbox.configure(state="disabled")
+
+    text_to_send_exercise = ""
+    text_to_send_exercise += "DATES:\n"
+    text_to_send_exercise += current_week_range
+
+    #Exercise Daily Statistics
+    daily_weight_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_weight_entries
+    daily_walking_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_walking_entries
+    daily_distance_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_distance_entries
+    daily_steps_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_steps_entries
+    daily_calories_entries = app.weekly_daily_tabs.weekly_tab.exercise_frame.daily_calories_entries
+    text_to_send_exercise += "\n\nEXERCISE DAILY STATISTICS:"
+    
+    weight_str_arr = []
+    time_walked_str_arr = []
+    distance_str_arr = []
+    steps_str_arr = []
+    calories_str_arr = []
+    for i in range(7):
+        # Append Weight
+        text_to_send_exercise += "\n" + days_as_strings[i] + " - Weight: "
+        if (daily_weight_entries[i].get() != ""):
+            text_to_send_exercise += daily_weight_entries[i].get()
+            weight_str_arr.append(daily_weight_entries[i].get())
+        else:
+            text_to_send_exercise += "None Given"
+            weight_str_arr.append("None Given")
+        
+        # Append Time Walked
+        text_to_send_exercise += ", Time Walked: "
+        if (daily_walking_entries[i].get() != ""):
+            text_to_send_exercise += daily_walking_entries[i].get()
+            time_walked_str_arr.append(daily_walking_entries[i].get())
+        else:
+            text_to_send_exercise += "00:00:00"
+            time_walked_str_arr.append("00:00:00")
+        
+        # Append Distance, Steps, and Calories Burned
+        text_to_send_exercise += ", Distance: "
+        text_to_send_exercise += append_distance_steps_calories_to_message(daily_distance_entries[i])
+        distance_str_arr.append(append_distance_steps_calories_to_message(daily_distance_entries[i]))
+        text_to_send_exercise += ", Steps: "
+        text_to_send_exercise += append_distance_steps_calories_to_message(daily_steps_entries[i])
+        steps_str_arr.append(append_distance_steps_calories_to_message(daily_steps_entries[i]))
+        text_to_send_exercise += ", Calories Burned: "
+        text_to_send_exercise += append_distance_steps_calories_to_message(daily_calories_entries[i])
+        calories_str_arr.append(append_distance_steps_calories_to_message(daily_calories_entries[i]))
+
+    #Exercise Total Statistics
+    text_to_send_exercise += "\n\nEXERCISE TOTAL STATISTICS:"
+    text_to_send_exercise += "\nWeight Lost: "
+    total_str_weight = ""
+    if (app.totals_frame.total_weight_lost_entry.get() != ""):
+        text_to_send_exercise += app.totals_frame.total_weight_lost_entry.get()
+        total_str_weight = app.totals_frame.total_weight_lost_entry.get()
+    else: 
+        text_to_send_exercise += "0"
+        total_str_weight = "0"
+
+    text_to_send_exercise += ", Time Walked: "
+    total_str_time_walked = ""
+    if (app.totals_frame.time_walked_entry.get() != ""):
+        text_to_send_exercise += app.totals_frame.time_walked_entry.get()
+        total_str_time_walked = app.totals_frame.time_walked_entry.get()
+    else: 
+        text_to_send_exercise += "00:00:00"
+        total_str_time_walked = "00:00:00"
+    
+    categories = [", Distance: ", ", Steps: ", ", Calories Burned: "]
+    category_vars = ["", "", ""]
+    walking_stats_entries = app.totals_frame.walking_stats_entries
+    for i in range(3):
+        text_to_send_exercise += categories[i]
+        if (walking_stats_entries[i].get() != ""):
+            text_to_send_exercise += walking_stats_entries[i].get()
+            category_vars[i] = walking_stats_entries[i].get()
+        else:
+            text_to_send_exercise += "0"
+            category_vars[i] = "0"
+
+    textbox2 = CTk.CTkTextbox(tab_view.tab("Exercise Data"), wrap="word", height=350, width=750)
+    textbox2.pack()
+    textbox2.insert(1.0, text_to_send_exercise)
+    textbox2.configure(state="disabled")
+
+    button_frame = CTk.CTkFrame(modal_dialog, fg_color="transparent")
+    button_frame.grid(row=12, column=0, pady=(10,10))
+
+    def send_code_data_and_close():
+        with open('work.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            # Dates
+            writer.writerow(["Dates"])
+            writer.writerow([current_week_range])
+            writer.writerow([""])
+            # Time Worked Each Day
+            writer.writerow(["Day of the Week", "Time Worked Each Day", "Punches for Each Day"])
+            for i in range(7):
+                writer.writerow([days_as_strings[i], programming_times_strings[i], punches_times_strings[i]])
+            writer.writerow([""])
+            # Total Time Worked
+            writer.writerow(["Total Time Worked"])
+            writer.writerow([total_str_time_worked])
+            writer.writerow([""])
+            # Description
+            writer.writerow(["Description"])
+            writer.writerow([description_str])
+
+        load_dotenv(".env", override=True)
+        webhook_arr = os.environ.get("Programming_Webhooks")
+        send_data(webhook_arr, "work.csv", text_to_send)
+
+        modal_dialog.destroy()
+
+    def send_exerice_data_and_close():
+        with open('exercise.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            # Dates
+            writer.writerow(["Dates"])
+            writer.writerow([current_week_range])
+            writer.writerow([""])
+            # Time Worked Each Day
+            writer.writerow(["Exercise Daily Statistics"])
+            writer.writerow(["Day of the Week", "Weight", "Time Walked", "Distance", "Steps", "Calories Burned"])
+            for i in range(7):
+                writer.writerow([days_as_strings[i], weight_str_arr[i], time_walked_str_arr[i], distance_str_arr[i], steps_str_arr[i], calories_str_arr[i]])
+            writer.writerow([""])
+            # Total Time Worked
+            writer.writerow(["Exercise Total Statistics"])
+            writer.writerow(["Total Weight Lost", "Total Time Walked", "Total Distance", "Total Steps", "Total Calories Burned"])
+            writer.writerow([total_str_weight, total_str_time_walked, category_vars[0], category_vars[1], category_vars[2]])
+
+        load_dotenv(".env", override=True)
+        webhook_arr = os.environ.get("Exercise_Webhooks")
+        send_data(webhook_arr, "exercise.csv", text_to_send_exercise)
+
+        modal_dialog.destroy()
+
+    button = CTk.CTkButton(button_frame, text="Send Work Data", command=send_code_data_and_close)
+    button.grid(row=0, column=0, padx=(0,5))
+
+    button = CTk.CTkButton(button_frame, text="Send Exercise Data", command=send_exerice_data_and_close)
+    button.grid(row=0, column=1, padx=(5,5))
+
+    button = CTk.CTkButton(button_frame, text="Cancel", command=modal_dialog.destroy)
+    button.grid(row=0, column=2, padx=(5,0))
+
+    app.wait_window(modal_dialog)  # Wait for the modal dialog to be closed
+
+def clear_data_modal():
+    modal_dialog = CTk.CTkToplevel(app)
+    if (operating_system == "Linux"):
+        modal_dialog.wait_visibility()
+    else:
+        pass
+    modal_dialog.grab_set()
+    modal_dialog.geometry("400x150")
+    modal_dialog.title("Clear Data")
+    if (operating_system == "Linux"):
+        pass
+    else:
+        modal_dialog.after(250, lambda: modal_dialog.iconbitmap("icon4.ico"))
+    center_window(modal_dialog, 400, 150)
+    modal_dialog.grid_columnconfigure(0, weight=1)
+
+    # Display message as labels
+    first_label = CTk.CTkLabel(modal_dialog, text="Make sure that all data is sent beforehand.")
+    first_label.grid(row=0, column=0)
+    
+    second_label = CTk.CTkLabel(modal_dialog, text="All data not sent will be permanently lost!")
+    second_label.grid(row=1, column=0)
+
+    third_label = CTk.CTkLabel(modal_dialog, text="Are you sure you want to clear your data?")
+    third_label.grid(row=2, column=0)
+
+    def clear_data_and_close():
+        clear_data()
+        modal_dialog.destroy()
+
+    # Frame to display buttons side by side
+    button_frame = CTk.CTkFrame(modal_dialog, fg_color="transparent")
+    button_frame.grid(row=3, column=0, pady=(15,0))
+
+    button = CTk.CTkButton(button_frame, text="Clear Data", command=clear_data_and_close)
+    button.grid(row=0, column=0, padx=(0,5))
+
+    button = CTk.CTkButton(button_frame, text="Cancel", command=modal_dialog.destroy)
+    button.grid(row=0, column=1, padx=(5,0))
+
+    app.wait_window(modal_dialog)
+
+def new_week_modal():
+    # Create modal differently based on operating system
+    modal_dialog = CTk.CTkToplevel(app)
+    if (operating_system == "Linux"):
+        modal_dialog.wait_visibility()
+    else:
+        pass
+    modal_dialog.grab_set()
+    modal_dialog.geometry("750x200")
+    modal_dialog.title("Clear Data")
+    if (operating_system == "Linux"):
+        pass
+    else:
+        modal_dialog.after(250, lambda: modal_dialog.iconbitmap("icon4.ico"))
+    center_window(modal_dialog, 750, 200)
+    modal_dialog.grid_columnconfigure(0, weight=1)
+
+    # Display message as labels
+    first_label = CTk.CTkLabel(modal_dialog, text="You have been clocked out due to being clocked in during a new week without clearing first.")
+    first_label.grid(row=0, column=0, pady=(15,0))
+
+    second_label = CTk.CTkLabel(modal_dialog, text="Your program has been locked except for the description box, send weekly data button and clear weekly data button.")
+    second_label.grid(row=1, column=0)
+
+    third_label = CTk.CTkLabel(modal_dialog, text="Please send your data and then clear your data to unlock your program.")
+    third_label.grid(row=2, column=0)
+    
+    fourth_label = CTk.CTkLabel(modal_dialog, text="All data not sent will be permanently lost!")
+    fourth_label.grid(row=3, column=0)
+
+    button = CTk.CTkButton(modal_dialog, text="Close", command=modal_dialog.destroy)
+    button.grid(row=4, column=0, pady=(15,0))
+
+    app.wait_window(modal_dialog)
 
 class ProgrammingFrame(CTk.CTkFrame):
     def __init__(self, master):
@@ -976,6 +1725,7 @@ class ExerciseFrame(CTk.CTkFrame):
         global daily_distances
         global daily_steps
         global daily_calories
+        global current_weight
 
         left_right_padding = 0
         if (operating_system == "Linux"):
@@ -1016,6 +1766,11 @@ class ExerciseFrame(CTk.CTkFrame):
                 entry.configure(state="disabled")
 
             self.daily_weight_entries.append(entry)
+
+        # Get current weight
+        if (self.daily_weight_entries[i].get() != ""):
+            last_weight = daily_weights[i]
+            current_weight = last_weight
 
         # Time Walked Entries
         self.daily_walking_entries = []
@@ -1096,7 +1851,6 @@ class ExerciseFrame(CTk.CTkFrame):
             # Attempt to cast weight_entry to float then save
             self.weight_as_float = float(weight_entry.get())
             self.assign_weight_to_correct_day(weight_entry)
-            update_global_daily_lists()
             self.calc_weight_loss()
             write_current_vars_to_walking_json()
 
@@ -1109,7 +1863,6 @@ class ExerciseFrame(CTk.CTkFrame):
                 weight_entry.insert(0, "0")
                 self.weight_as_float = float(weight_entry.get())
                 self.assign_weight_to_correct_day(weight_entry)
-                update_global_daily_lists()
                 self.calc_weight_loss()
                 write_current_vars_to_walking_json()
             else:
@@ -1118,35 +1871,29 @@ class ExerciseFrame(CTk.CTkFrame):
                 weight_entry.insert(0, str(self.weight_as_float))
 
     def assign_weight_to_correct_day(self, widget):
-        global sunday_weight
-        global monday_weight
-        global tuesday_weight
-        global wednesday_weight
-        global thursday_weight
-        global friday_weight
-        global saturday_weight
-
+        global daily_weights
         # Assign weight to correct global var
         widget_name = str(widget).split(".")[6]
         if ("2" in widget_name):
-            monday_weight = self.weight_as_float
+            daily_weights[1] = self.weight_as_float
         elif ("3" in widget_name):
-            tuesday_weight = self.weight_as_float
+            daily_weights[2] = self.weight_as_float
         elif ("4" in widget_name):
-            wednesday_weight = self.weight_as_float
+            daily_weights[3] = self.weight_as_float
         elif ("5" in widget_name):
-            thursday_weight = self.weight_as_float
+            daily_weights[4] = self.weight_as_float
         elif ("6" in widget_name):
-            friday_weight = self.weight_as_float
+            daily_weights[5] = self.weight_as_float
         elif ("7" in widget_name):
-            saturday_weight = self.weight_as_float
+            daily_weights[6] = self.weight_as_float
         else:
             # 1st entry doesn't have unique identifier
-            sunday_weight = self.weight_as_float
+            daily_weights[0] = self.weight_as_float
 
     def calc_weight_loss(self):
         global daily_weights
         global total_weight_lost
+        global current_weight
         
         first_weight = 0
         last_weight = 0
@@ -1161,6 +1908,8 @@ class ExerciseFrame(CTk.CTkFrame):
             if (self.daily_weight_entries[i].get() != ""):
                 last_weight = daily_weights[i]
                 weigh_in_count = weigh_in_count + 1
+                current_weight = last_weight
+
         weight_lost_str = ""
         #Check to make sure both vars are not equal
         if (first_weight != last_weight):
@@ -1353,7 +2102,7 @@ class TotalsFrame(CTk.CTkFrame):
             self.time_walked_entry.configure(state="disabled")
 
         # Total Walking Stats Entries
-        total_walking_stats = [total_walking_distance, total_walking_steps, total_calories]
+        self.total_walking_stats = [total_walking_distance, total_walking_steps, total_calories]
         self.walking_stats_entries = []
         for i in range(3):
             pad_left = 50
@@ -1367,8 +2116,8 @@ class TotalsFrame(CTk.CTkFrame):
             entry.configure(state="disabled")
             entry.grid(row=4, column=(i + 1), padx=(pad_left, pad_right), pady=(5,5))
 
-            if (total_walking_stats[i] != 0):
-                walking_stat_string = str(total_walking_stats[i])
+            if (self.total_walking_stats[i] != 0):
+                walking_stat_string = str(self.total_walking_stats[i])
                 entry.configure(state="normal")
                 entry.insert(0, walking_stat_string)
                 entry.configure(state="disabled")
@@ -1392,7 +2141,6 @@ class App(CTk.CTk):
     def __init__(self):
         super().__init__()
 
-        # region Window Settings
         self.title("Productivity Tracker")
 
         # Use different method to set icon based on operating system
@@ -1407,7 +2155,6 @@ class App(CTk.CTk):
         self.geometry(f"{window_width}x{window_height}")
         center_window(self, window_width, window_height)
         self.grid_columnconfigure(0, weight=1)
-        #endregion 
 
         # Add Content for weekly and daily tabs
         self.weekly_daily_tabs = WeeklyDailyTabs(self, fg_color="transparent")
