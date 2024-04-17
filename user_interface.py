@@ -28,7 +28,6 @@ p_cycle_count = 1
 start_time = 0
 time_passed = 0
 timer_id = ""
-curr_week_str = ""
 
 daily_programming_times = []
 daily_punches = []
@@ -245,12 +244,12 @@ for key, value in data.items():
 with open("walking.json", "r") as file:
     data = json.load(file)
 
-excludes = ["weight", "time", "distance", "steps", "calories"]
+includes = ["weight", "time", "distance", "steps", "calories"]
 walking_arrs = [daily_weights, daily_walking_times, daily_distances, daily_steps, daily_calories]
 
 i = 0
 for key, value in data.items():
-    if ("total" not in key and excludes[i] in key):
+    if ("total" not in key and includes[i] in key):
         walking_arrs[i] = value
         i += 1
 
@@ -268,24 +267,15 @@ description = data["description"]
 with open("must_clear.json", "r") as file:
     data = json.load(file)
 
-if ("must_clear" not in data):
-    data = {
-        "must_clear": False,
-        "current_week": -1
-    }
+must_clear = data["must_clear"]
+current_week = data["current_week"]
 
 with open("current_week.json", "r") as file:
     data = json.load(file)
 
-if ("current_week_str" not in data):
-    data = {
-        "curr_week_str": ""
-    }
+curr_week_str = data["current_week_str"]
 
 can_clear = True
-
-must_clear = False
-
 current_weight = 0
 speed_in_mph = 2
 steps_per_mile = 2000
@@ -1745,11 +1735,3 @@ else:
 CTk.set_default_color_theme(color)
 app = App()
 app.mainloop()
-
-# Notes
-# Delete current_week_json
-# Merge as many json files as possible
-# Make arrays accessible without the need to reach into classes
-# Rewrite json initialization to define vars first then create data using functions
-# Optimize global variable specifications
-# Write additional function that chacks for day change to handle weight entry config changes, cancel when calling update_time
