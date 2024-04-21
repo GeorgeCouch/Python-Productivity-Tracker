@@ -247,11 +247,12 @@ with open("walking.json", "r") as file:
 includes = ["weight", "time", "distance", "steps", "calories"]
 walking_arrs = [daily_weights, daily_walking_times, daily_distances, daily_steps, daily_calories]
 
-i = 0
-for key, value in data.items():
-    if ("total" not in key and includes[i] in key):
-        walking_arrs[i] = value
-        i += 1
+for i in range(5):
+    j = 0
+    for key, value in data.items():
+        if ("total" not in key and includes[i] in key):
+            walking_arrs[i][j] = value
+            j += 1
 
 total_weight_lost = data["total_weight_lost"]
 total_walking_time = data["total_walking_time"]
@@ -273,7 +274,7 @@ current_week = data["current_week"]
 with open("current_week.json", "r") as file:
     data = json.load(file)
 
-curr_week_str = data["current_week_str"]
+curr_week_str = data["curr_week_str"]
 
 can_clear = True
 current_weight = 0
@@ -338,7 +339,8 @@ def walking(day_as_number):
         if (i == day_as_number):
             # Increment time
             daily_walking_times[i] = daily_walking_times[i] + 1
-            format_entry_time(daily_walking_entries[i], daily_walking_times[i])
+            time_string = format_time_as_string_from_num(daily_walking_times[i])
+            delete_and_insert_data_into_entry(daily_walking_entries[i], time_string)
 
             # Get and display Distance
             time_in_seconds = daily_walking_times[i]
@@ -378,7 +380,8 @@ def walking(day_as_number):
         total_calories = total_calories + daily_calories[i]
 
     # Format and display totals
-    format_entry_time(app.totals_frame.time_walked_entry, total_walking_time)
+    time_string = format_time_as_string_from_num(total_walking_time)
+    delete_and_insert_data_into_entry(app.totals_frame.time_walked_entry, time_string)
 
     total_walking_distance = round(total_walking_distance, 2)
     total_walking_steps = round(total_walking_steps, 2)
@@ -419,13 +422,6 @@ def create_notification(title, message):
     app.attributes("-topmost", True)
     app.attributes("-topmost", False)
 
-def format_pomodoro_time_label(p_time):
-    hours = p_time // 3600
-    minutes = (p_time % 3600) // 60
-    seconds = p_time % 60
-    p_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-    app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=p_string)
-
 def pomodoro():
     global pomodoro_break
     global p_focus_time
@@ -440,15 +436,18 @@ def pomodoro():
     if (not pomodoro_break):
         # 25 min
         p_focus_time = p_focus_time - 1
-        format_pomodoro_time_label(p_focus_time) 
+        time_string = format_time_as_string_from_num(p_focus_time)
+        app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=time_string)
     elif (pomodoro_break and p_cycle_count % 4 == 0):
         # 15 min
         p_long_break_time = p_long_break_time - 1
-        format_pomodoro_time_label(p_long_break_time)
+        time_string = format_time_as_string_from_num(p_long_break_time)
+        app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=time_string)
     else:
         # 5 min
         p_break_time = p_break_time - 1
-        format_pomodoro_time_label(p_break_time)
+        time_string = format_time_as_string_from_num(p_break_time)
+        app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=time_string)
         
     # Handle pomodoro state end (time reaches 00:00:00)
     if (app.weekly_daily_tabs.daily_tab.pomodoro_time_label._text == "00:00:00"):
@@ -475,15 +474,18 @@ def pomodoro():
             if (not pomodoro_break):
                 # 25 min
                 create_notification("Focus", "Focus for 25 minutes.")
-                format_pomodoro_time_label(p_focus_time)
+                time_string = format_time_as_string_from_num(p_focus_time)
+                app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=time_string)
             elif (pomodoro_break and p_cycle_count % 4 == 0):
                 # 15 min
                 create_notification("Long Break", "Break for 15 minutes.")
-                format_pomodoro_time_label(p_long_break_time)
+                time_string = format_time_as_string_from_num(p_long_break_time)
+                app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=time_string)
             else:
                 # 5 min
                 create_notification("Short Break", "Break for 5 minutes.")
-                format_pomodoro_time_label(p_break_time)
+                time_string = format_time_as_string_from_num(p_break_time)
+                app.weekly_daily_tabs.daily_tab.pomodoro_time_label.configure(text=time_string)
 
 def handle_being_clocked_in_past_saturday_midnight():
     global current_week
@@ -624,10 +626,11 @@ def get_date_range_for_current_week():
     return date_range
 
 def get_day_suffix(day):
-    if 4 <= day <= 20 or 24 <= day <= 30:
+    if (3 < day < 21) or (23 < day < 31):
         suffix = "th"
     else:
-        suffix = ["th", "st", "nd", "rd"][day % 10 - 1]
+        suffixes = ["th", "st", "nd", "rd"]
+        suffix = suffixes[day % 10]
     return suffix
 
 def append_pop_configure_punches(punches, day_as_number, start_end_str):
@@ -1367,7 +1370,7 @@ class ExerciseFrame(CTk.CTkFrame):
             entry.grid(row=(i + 2), column=2, padx=(5, 5))
 
             if (daily_walking_times[i] != 0):
-                walking_time_string = format_time_as_string_from_num(daily_walking_times)
+                walking_time_string = format_time_as_string_from_num(daily_walking_times[i])
                 delete_and_insert_data_into_entry(entry, walking_time_string)
 
             self.daily_walking_entries.append(entry)
@@ -1512,6 +1515,7 @@ class DailyFrame(CTk.CTkFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
 
+        # Adjust UI based on operating system
         timer_font_size = 0
         walking_switch_padding = 0
         bottom_padding = 0
@@ -1733,5 +1737,10 @@ if (operating_system == "Linux"):
 else:
     color = "dark-blue"
 CTk.set_default_color_theme(color)
+
+for i in range(32):
+    print(i, get_day_suffix(i))
+
+# Run App
 app = App()
 app.mainloop()
