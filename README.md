@@ -1,1 +1,1 @@
-# Python Productivity Tracker Linux Version
+# Python Productivity Tracker
