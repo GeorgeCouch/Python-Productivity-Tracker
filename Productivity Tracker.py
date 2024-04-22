@@ -213,8 +213,6 @@ for i in range(len(json_files)):
 file_path = ".env"
 if not os.path.isfile(file_path):
     with open(".env", "w", newline='') as file:
-        file.write("GeorgeCGeneral='None'\n")
-        file.write("GeorgeCMisc='None'\n")
         file.write("Programming_Webhooks='None'\n")
         file.write("Exercise_Webhooks='None'\n")
 
